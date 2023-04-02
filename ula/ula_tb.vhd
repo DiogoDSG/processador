@@ -10,11 +10,14 @@ architecture a_ula_tb of ula_tb is
         port(
             a,b:    in unsigned(7 downto 0);
             sel_op: in unsigned(2 downto 0);
-            result: out unsigned(7 downto 0)
+            result: out unsigned(7 downto 0);
+            exceed: out std_logic
+
         ); 
     end component;
 
     signal a,b,result: unsigned(7 downto 0);
+    signal exceed: std_logic;
     signal sel_op: unsigned(2 downto 0);
 
     begin
@@ -22,7 +25,8 @@ architecture a_ula_tb of ula_tb is
             a => a,
             b => b,
             sel_op => sel_op,
-            result => result
+            result => result,
+            exceed => exceed
         );
     process
     begin
@@ -80,7 +84,7 @@ architecture a_ula_tb of ula_tb is
         a <= "00001000";
         b <= "00001000";
         sel_op <= "011"; -- = 00
-       wa it for 10 ns; 
+        wait for 10 ns; 
         a <= "10000000"; -- negative 
         b <= "00000010";
         sel_op <= "011"; -- = 00
@@ -98,5 +102,18 @@ architecture a_ula_tb of ula_tb is
         sel_op <= "011";
         wait for 10 ns;
         wait;
+
+        -- EXCEED   
+        a <= "01111111";
+        b <= "00000001";
+        sel_op <= "000"; -- SUM = FF (-1)
+        wait for 10 ns; 
+        a <= "01111111"; -- negative 
+        b <= "11111111";
+        sel_op <= "001"; -- SUB = 00
+        wait for 10 ns;
+      
+        wait;
+
     end process;
 end architecture;
