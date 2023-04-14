@@ -1,6 +1,9 @@
 # Ignore all files that do not end with .vhd or .md
-*
-**/*
-**/!*.vhd
-**/!*.md
-!.gitignore
+# *
+# **/*
+# **/!*.vhd
+# **/!*.md
+# !.gitignore
+
+**/*.cf
+**/*.ghw
