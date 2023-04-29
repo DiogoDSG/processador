@@ -11,7 +11,7 @@ architecture a_control_unit_tb of control_unit_tb is
             clk: in std_logic;
             rst: in std_logic;
             data: out unsigned(13 downto 0);
-            current_state: out unsigned(0 downto 0)
+            current_state: out std_logic
         );
     end component;
 
@@ -22,7 +22,7 @@ architecture a_control_unit_tb of control_unit_tb is
     signal clk: std_logic;
     signal rst: std_logic;
     signal data: unsigned(13 downto 0);
-    signal current_state: unsigned(0 downto 0);
+    signal current_state: std_logic;
 
     begin
         uut: control_unit port map(
@@ -31,6 +31,15 @@ architecture a_control_unit_tb of control_unit_tb is
             data => data,
             current_state => current_state
         );
+
+    rst_global: process
+    begin
+        rst <= '1';
+        wait for period_time;
+        rst <= '0';
+        wait;
+    end process rst_global;
+
     clk_global: process
     begin
         while finished /= '1' loop
@@ -49,10 +58,11 @@ architecture a_control_unit_tb of control_unit_tb is
         wait;
     end process;
 
-    process
-    begin
-        rst<='0';
-        wait for period_time*20;
-        wait;
-    end process;
+    -- process
+    -- begin
+    --     rst <= '1';
+    --     wait for period_time/2;
+    --     rst <= '0';
+    --     wait;
+    -- end process;
 end architecture;
