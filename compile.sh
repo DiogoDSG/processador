@@ -4,4 +4,4 @@ ghdl -a state_machine.vhd && ghdl -e state_machine && ghdl -a state_machine_tb.v
 
 ghdl -a program_counter.vhd && ghdl -e program_counter && ghdl -a program_counter_tb.vhd && ghdl -e program_counter_tb && ghdl -r program_counter_tb --wave=program_counter_tb.ghw
 
-ghdl -a control_unit.vhd && ghdl -e control_unit && ghdl -a control_unit_tb.vhd && ghdl -e control_unit_tb && ghdl -r control_unit_tb --stop-delta=100 --wave=control_unit_tb.ghw
+ghdl -a control_unit.vhd && ghdl -e control_unit && ghdl -a control_unit_tb.vhd && ghdl -e control_unit_tb && ghdl -r control_unit_tb --wave=control_unit_tb.ghw
