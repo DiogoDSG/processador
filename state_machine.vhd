@@ -6,19 +6,24 @@ entity state_machine is
     port (
         clk: in std_logic;
         rst: in std_logic;
-        current_state: out std_logic
+        current_state: out unsigned(2 downto 0)
     );
 end entity;
 
 architecture a_state_machine of state_machine is
-signal state: std_logic;
+signal state: unsigned(2 downto 0) := "000";
 begin
+    
     process(clk, rst)
     begin   
         if rst = '1' then
-            state <= '0';
+            state <= "000";
         elsif rising_edge(clk) then
-            state <= not state;
+            if state = "100" then
+                state <=  "000";
+            else
+                state <= state + 1;
+            end if;
         end if;
     end process;
 

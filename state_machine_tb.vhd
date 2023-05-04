@@ -10,7 +10,7 @@ architecture a_state_machine_tb of state_machine_tb is
         port(
             clk: in std_logic;
             rst: in std_logic;
-            current_state: out std_logic
+            current_state: out unsigned(2 downto 0)
         ); 
     end component;
 

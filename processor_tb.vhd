@@ -2,19 +2,16 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity top_level_tb is
+entity processor_tb is
 end entity;
 
-architecture a_top_level_tb of top_level_tb is
-    component top_level
+architecture a_processor_tb of processor_tb is
+    component processor
         port(
             clk: in std_logic;
             rst: in std_logic;
-            wr_en: in std_logic;
-            alu_src: in std_logic;
             reg1: in unsigned(2 downto 0);
             reg2: in unsigned(2 downto 0);
-            ext_constant: in unsigned(15 downto 0);
             wr_reg: in unsigned(2 downto 0);
             sel_op: in unsigned(2 downto 0);
             alu_out: out unsigned(15 downto 0)
@@ -28,14 +25,11 @@ architecture a_top_level_tb of top_level_tb is
     signal reg1, reg2, wr_reg, sel_op: unsigned(2 downto 0);
     signal alu_out: unsigned(15 downto 0);
     begin
-        uut: top_level port map(
+        uut: processor port map(
             clk => clk,
             rst => rst,
-            wr_en => wr_en,
-            alu_src => alu_src,
             reg1 => reg1,
             reg2 => reg2,
-            ext_constant => ext_constant,
             wr_reg => wr_reg,
             sel_op => sel_op,
             alu_out => alu_out

@@ -8,10 +8,11 @@ end entity;
 architecture a_control_unit_tb of control_unit_tb is
     component control_unit
         port(
-            clk: in std_logic;
+            opcode: in unsigned(3 downto 0);
             rst: in std_logic;
-            data: out unsigned(13 downto 0);
-            current_state: out std_logic
+            jump_en: out std_logic;
+            alu_src: out std_logic;
+            reg_write: out std_logic
         );
     end component;
 
@@ -19,37 +20,18 @@ architecture a_control_unit_tb of control_unit_tb is
 
     constant period_time: time := 100 ns;
     signal finished: std_logic := '0';
-    signal clk: std_logic;
-    signal rst: std_logic;
-    signal data: unsigned(13 downto 0);
-    signal current_state: std_logic;
+    signal rst, jump_en, reg_write, alu_src: std_logic;
+    signal opcode: unsigned(3 downto 0);
 
     begin
         uut: control_unit port map(
-            clk => clk,
+            opcode => opcode,
             rst => rst,
-            data => data,
-            current_state => current_state
+            jump_en => jump_en,
+            alu_src => alu_src,
+            reg_write => reg_write
         );
 
-    rst_global: process
-    begin
-        rst <= '1';
-        wait for period_time;
-        rst <= '0';
-        wait;
-    end process rst_global;
-
-    clk_global: process
-    begin
-        while finished /= '1' loop
-            clk <= '1';
-            wait for period_time / 2;
-            clk <= '0';
-            wait for period_time / 2;
-        end loop;
-        wait;
-    end process;
 
     sim_time_proc: process
     begin
@@ -58,11 +40,15 @@ architecture a_control_unit_tb of control_unit_tb is
         wait;
     end process;
 
-    -- process
-    -- begin
-    --     rst <= '1';
-    --     wait for period_time/2;
-    --     rst <= '0';
-    --     wait;
-    -- end process;
+    process
+    begin
+        opcode <= "1111";
+        rst <= '0';
+        wait for period_time/2;
+        opcode <= "0000";
+        wait for period_time/2;
+        rst <= '1';
+
+        wait;
+    end process;
 end architecture;
