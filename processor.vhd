@@ -18,6 +18,7 @@ architecture a_processor of processor is
             read_reg1: in unsigned(2 downto 0);
             read_reg2: in unsigned(2 downto 0);
             wr_en: in std_logic;
+            state: in unsigned(2 downto 0);
             wr_data: in unsigned(15 downto 0);
             wr_reg: in unsigned(2 downto 0);
             read_data1: out unsigned(15 downto 0);
@@ -29,6 +30,7 @@ architecture a_processor of processor is
         port (
             a,b:    in unsigned(15 downto 0);
             sel_op: in unsigned(3 downto 0);
+            state: in unsigned(2 downto 0);
             result: out unsigned(15 downto 0);
             exceed: out std_logic
         );
@@ -80,7 +82,7 @@ architecture a_processor of processor is
     -- control
     signal pc_wr_en: std_logic := '1';
     signal jump_en, alu_src: std_logic := '0';
-    signal reg_write: std_logic;
+    signal reg_write, rst_state_machine: std_logic;
 
     -- ula
     signal alu_exceed: std_logic;
@@ -103,42 +105,31 @@ begin
     reg3 <= rom_data(3 downto 1);
     opcode <= rom_data(13 downto 10);
 
-    state_machine_instance: state_machine port map(clk => clk, rst => rst, current_state => state);
+    state_machine_instance: state_machine port map(clk => clk, rst => rst_state_machine, current_state => state);
 
     pc_instance: program_counter port map(clk => clk, wr_en => pc_wr_en, rst => rst, address_in => pc_address_in, address_out => pc_address_out);
 
     rom_instance: rom port map(clk => clk, address => pc_address_out, data => rom_data);
 
-    control_unit_instance: control_unit port map(opcode => opcode, reg_write => reg_write, jump_en => jump_en); 
+    control_unit_instance: control_unit port map(opcode => opcode, reg_write => reg_write, alu_src => alu_src, jump_en => jump_en); 
 
-    regbank: register_bank port map(clk => clk, rst => rst, wr_en => reg_write, read_reg1 => reg1, read_reg2 => reg2, wr_data=> wr_data_signal, wr_reg => reg3, read_data1 => alu_a, read_data2 => alu_b );
+    regbank: register_bank port map(clk => clk, rst => rst, wr_en => reg_write, read_reg1 => reg1, read_reg2 => reg2, wr_data=> wr_data_signal, state => state, wr_reg => reg3, read_data1 => alu_a, read_data2 => alu_b );
 
     pc_adder_instance: pc_adder port map(state => state, current_address => pc_address_out, next_address => pc_adder_next_address);
 
-    ula_instance: ula port map(a => alu_a, b => mux_alu, sel_op => opcode, result => wr_data_signal, exceed =>alu_exceed);
+    ula_instance: ula port map(a => alu_a, b => mux_alu, sel_op => opcode, state => state, result => wr_data_signal, exceed =>alu_exceed);
 
     -- data <= rom_data;
 
     jump_address <= rom_data(6 downto 0);
     
     pc_address_in <= jump_address when jump_en = '1' else pc_adder_next_address;
-
+    rst_state_machine <= '1' when jump_en='1' else '0';
     -- current_state <= state;
     const <= "000000000" when rom_data(6) = '0' else "111111111";
     
-
-    process(clk, rst)
-    begin   
-        if rising_edge(clk) then
-            if alu_src = '1' then
-                -- mux_alu <= const & rom_data(6 downto 0);
-                mux_alu <= "0000000000001111";
-            elsif alu_src = '0' then
-                mux_alu <= alu_b;
-            end if;
-            alu_out <= wr_data_signal;
-        end if;
-    end process;
+    mux_alu <= const & rom_data(6 downto 0) when alu_src='1' else alu_b;
+    alu_out <= wr_data_signal;
 end architecture;
 
 

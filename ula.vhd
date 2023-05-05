@@ -6,6 +6,7 @@ entity ula is
     port (
         a,b:    in unsigned(15 downto 0);
         sel_op: in unsigned(3 downto 0);
+        state: in unsigned(2 downto 0);
         result: out unsigned(15 downto 0);
         exceed: out std_logic
     );
@@ -39,7 +40,9 @@ begin
                 sum when sel_op="0001" else
                 sub when sel_op="0010" else
                 equal when sel_op="0011" else
-                greater when sel_op="0100" else 
+                greater when sel_op="0100" else
+                sum when sel_op="0101" else
+                sum when sel_op="0110" else
                 "0000000000000000";
 
 end architecture;

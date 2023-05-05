@@ -10,6 +10,7 @@ architecture a_ula_tb of ula_tb is
         port(
             a,b:    in unsigned(15 downto 0);
             sel_op: in unsigned(3 downto 0);
+            state: in unsigned(2 downto 0);
             result: out unsigned(15 downto 0);
             exceed: out std_logic
 
@@ -19,11 +20,14 @@ architecture a_ula_tb of ula_tb is
     signal a,b,result: unsigned(15 downto 0);
     signal exceed: std_logic;
     signal sel_op: unsigned(3 downto 0);
+    signal state: unsigned(2 downto 0);
+
 
     begin
         uut: ula port map(
             a => a,
             b => b,
+            state => state,
             sel_op => sel_op,
             result => result,
             exceed => exceed
@@ -31,6 +35,7 @@ architecture a_ula_tb of ula_tb is
     process
     begin
         -- SUM
+        state <= "010";
         a <= "0000000000001000"; -- 08
         b <= "0000000000001000"; -- 08
         sel_op <= "0000"; -- = 10

@@ -12,5 +12,5 @@ end entity;
 
 architecture a_pc_adder of pc_adder is
 begin 
-    next_address <= current_address + 1 when state = "000" else current_address;
+    next_address <= current_address + 1 when state = "100" else current_address;
 end architecture;

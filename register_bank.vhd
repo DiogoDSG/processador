@@ -9,6 +9,7 @@ entity register_bank is
         read_reg1: in unsigned(2 downto 0);
         read_reg2: in unsigned(2 downto 0);
         wr_en: in std_logic;
+        state: in unsigned(2 downto 0);
         wr_data: in unsigned(15 downto 0);
         wr_reg: in unsigned(2 downto 0);
         read_data1: out unsigned(15 downto 0);
@@ -45,13 +46,13 @@ begin
 
     data_in <= wr_data;
 
-    wr_en_1 <= '1' when wr_en='1' and wr_reg="001" else '0';
-    wr_en_2 <= '1' when wr_en='1' and wr_reg="010" else '0';
-    wr_en_3 <= '1' when wr_en='1' and wr_reg="011" else '0';
-    wr_en_4 <= '1' when wr_en='1' and wr_reg="100" else '0';
-    wr_en_5 <= '1' when wr_en='1' and wr_reg="101" else '0';
-    wr_en_6 <= '1' when wr_en='1' and wr_reg="110" else '0';
-    wr_en_7 <= '1' when wr_en='1' and wr_reg="111" else '0';
+    wr_en_1 <= '1' when wr_en='1' and wr_reg="001" and state="100" else '0';
+    wr_en_2 <= '1' when wr_en='1' and wr_reg="010" and state="100" else '0';
+    wr_en_3 <= '1' when wr_en='1' and wr_reg="011" and state="100" else '0';
+    wr_en_4 <= '1' when wr_en='1' and wr_reg="100" and state="100" else '0';
+    wr_en_5 <= '1' when wr_en='1' and wr_reg="101" and state="100" else '0';
+    wr_en_6 <= '1' when wr_en='1' and wr_reg="110" and state="100" else '0';
+    wr_en_7 <= '1' when wr_en='1' and wr_reg="111" and state="100" else '0';
 
     read_data1 <=   data_out_0 when read_reg1 = "000" else
                     data_out_1 when read_reg1 = "001" else

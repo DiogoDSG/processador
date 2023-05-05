@@ -7,3 +7,12 @@ opcode      fn
 0101        mov
 0110        movi
 1111        jump
+
+fn   reg1 reg2 reg3
+          (constant)
+movi $1, 2
+movi $2, 4
+add  $3, $1, $2
+sub  $4, $3, $1
+mov  $6, $4
+jmp  0

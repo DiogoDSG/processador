@@ -42,7 +42,9 @@ architecture a_control_unit_tb of control_unit_tb is
     begin
         opcode <= "1111";
         wait for period_time/2;
-        opcode <= "0000";
+        opcode <= "0110";
+        wait for period_time/2;
+        opcode <= "0001";
         wait for period_time/2;
         wait;
     end process;
