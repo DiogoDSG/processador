@@ -19,7 +19,7 @@ architecture a_reg16bits_tb of reg16bits_tb is
 
     constant period_time: time := 100 ns;
     signal finished: std_logic := '0';
-    signal data_in,data_out: unsigned(15 downto 0) := "0000000000000000";
+    signal data_in,data_out: unsigned(15 downto 0);
     signal wr_en, clk, rst: std_logic;
 
     begin

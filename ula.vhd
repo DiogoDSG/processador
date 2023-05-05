@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 entity ula is
     port (
         a,b:    in unsigned(15 downto 0);
-        sel_op: in unsigned(2 downto 0);
+        sel_op: in unsigned(3 downto 0);
         result: out unsigned(15 downto 0);
         exceed: out std_logic
     );
@@ -30,15 +30,16 @@ begin
 
     -- EXCEED
     exceed <=  '1' when
-                (sel_op="000" and ((a(15)='0' and b(15)='0' and sum(15)='1') or (a(15)='1' and b(15)='1' and sum(15)='0'))) or -- SUM
-                (sel_op="001" and ((a(15)='1' and b(15)='0' and sub(15)='0') or (a(15)='0' and b(15)='1' and sub(15)='1')))  -- SUB
+                (sel_op="0001" and ((a(15)='0' and b(15)='0' and sum(15)='1') or (a(15)='1' and b(15)='1' and sum(15)='0'))) or -- SUM
+                (sel_op="0010" and ((a(15)='1' and b(15)='0' and sub(15)='0') or (a(15)='0' and b(15)='1' and sub(15)='1')))  -- SUB
                 else '0';
 
     -- RESULT
-    result <=   sum when sel_op="000" else
-                sub when sel_op="001" else
-                equal when sel_op="010" else
-                greater when sel_op="011" else 
+    result <=   sum when sel_op="0000" else 
+                sum when sel_op="0001" else
+                sub when sel_op="0010" else
+                equal when sel_op="0011" else
+                greater when sel_op="0100" else 
                 "0000000000000000";
 
 end architecture;

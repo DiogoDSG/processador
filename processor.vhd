@@ -6,10 +6,6 @@ entity processor is
     port (
         clk: in std_logic;
         rst: in std_logic;
-        reg1: in unsigned(2 downto 0);
-        reg2: in unsigned(2 downto 0);
-        wr_reg: in unsigned(2 downto 0);
-        sel_op: in unsigned(2 downto 0);
         alu_out: out unsigned(15 downto 0)
     );
 end entity;
@@ -32,7 +28,7 @@ architecture a_processor of processor is
     component ula
         port (
             a,b:    in unsigned(15 downto 0);
-            sel_op: in unsigned(2 downto 0);
+            sel_op: in unsigned(3 downto 0);
             result: out unsigned(15 downto 0);
             exceed: out std_logic
         );
@@ -67,7 +63,6 @@ architecture a_processor of processor is
     component control_unit
         port(
             opcode: in unsigned(3 downto 0);
-            rst: in std_logic;
             jump_en: out std_logic;
             reg_write: out std_logic;
             alu_src: out std_logic
@@ -84,7 +79,8 @@ architecture a_processor of processor is
 
     -- control
     signal pc_wr_en: std_logic := '1';
-    signal jump_en, alu_src, reg_write: std_logic := '0';
+    signal jump_en, alu_src: std_logic := '0';
+    signal reg_write: std_logic;
 
     -- ula
     signal alu_exceed: std_logic;
@@ -99,21 +95,27 @@ architecture a_processor of processor is
     signal rom_data: unsigned(13 downto 0) := "00000000000000";
     signal pc_adder_next_address: unsigned(6 downto 0);
     signal const: unsigned(8 downto 0);
+    signal reg1, reg2, reg3: unsigned(2 downto 0);
 
 begin
-    regbank: register_bank port map(clk => clk, rst => rst, wr_en => reg_write, read_reg1 => reg1, read_reg2 => reg2, wr_data=> wr_data_signal, wr_reg => wr_reg, read_data1 => alu_a, read_data2 => alu_b );
-    
-    ula_instance: ula port map(a => alu_a, b => mux_alu, sel_op => sel_op, result => wr_data_signal, exceed =>alu_exceed);
-
-    pc_instance: program_counter port map(clk => clk, wr_en => pc_wr_en, rst => rst, address_in => pc_address_in, address_out => pc_address_out);
+    reg1 <= rom_data(9 downto 7);
+    reg2 <= rom_data(6 downto 4);  
+    reg3 <= rom_data(3 downto 1);
+    opcode <= rom_data(13 downto 10);
 
     state_machine_instance: state_machine port map(clk => clk, rst => rst, current_state => state);
 
+    pc_instance: program_counter port map(clk => clk, wr_en => pc_wr_en, rst => rst, address_in => pc_address_in, address_out => pc_address_out);
+
     rom_instance: rom port map(clk => clk, address => pc_address_out, data => rom_data);
+
+    control_unit_instance: control_unit port map(opcode => opcode, reg_write => reg_write, jump_en => jump_en); 
+
+    regbank: register_bank port map(clk => clk, rst => rst, wr_en => reg_write, read_reg1 => reg1, read_reg2 => reg2, wr_data=> wr_data_signal, wr_reg => reg3, read_data1 => alu_a, read_data2 => alu_b );
 
     pc_adder_instance: pc_adder port map(state => state, current_address => pc_address_out, next_address => pc_adder_next_address);
 
-    control_unit_instance: control_unit port map(opcode => rom_data(13 downto 10), rst => rst, reg_write => reg_write, jump_en => jump_en); 
+    ula_instance: ula port map(a => alu_a, b => mux_alu, sel_op => opcode, result => wr_data_signal, exceed =>alu_exceed);
 
     -- data <= rom_data;
 
@@ -129,7 +131,8 @@ begin
     begin   
         if rising_edge(clk) then
             if alu_src = '1' then
-                mux_alu <= const & rom_data(6 downto 0);
+                -- mux_alu <= const & rom_data(6 downto 0);
+                mux_alu <= "0000000000001111";
             elsif alu_src = '0' then
                 mux_alu <= alu_b;
             end if;

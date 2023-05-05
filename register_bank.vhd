@@ -43,73 +43,36 @@ begin
     reg6: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en_6, data_in=>data_in, data_out=>data_out_6);
     reg7: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en_7, data_in=>data_in, data_out=>data_out_7);
 
-    process(clk, rst, wr_en,read_reg1,read_reg2,wr_reg)
-    begin   
-        if rising_edge(clk) then
-            data_in <= wr_data;
-            
-            if wr_en='1' then
-                if wr_reg = "001" then
-                    wr_en_1 <= wr_en;
-                    data_in <= wr_data;
-                elsif wr_reg = "010" then
-                    wr_en_2 <= wr_en;
-                    data_in <= wr_data;
-                elsif wr_reg = "011" then
-                    wr_en_3 <= wr_en;
-                    data_in <= wr_data;
-                elsif wr_reg = "100" then
-                    wr_en_4 <= wr_en;
-                    data_in <= wr_data;
-                elsif wr_reg = "101" then
-                    wr_en_5 <= wr_en;
-                    data_in <= wr_data;
-                elsif wr_reg = "110" then
-                    wr_en_6 <= wr_en;
-                    data_in <= wr_data;
-                elsif wr_reg = "111" then
-                    wr_en_7 <= wr_en;
-                    data_in <= wr_data; 
-                end if;
-            end if;
+    data_in <= wr_data;
 
-            if read_reg1 = "000" then
-                read_data1 <= data_out_0;
-            elsif read_reg1 = "001" then
-                read_data1 <= data_out_1;
-            elsif read_reg1 = "010" then
-                read_data1 <= data_out_2;
-            elsif read_reg1 = "011" then
-                read_data1 <= data_out_3;
-            elsif read_reg1 = "100" then
-                read_data1 <= data_out_4;
-            elsif read_reg1 = "101" then
-                read_data1 <= data_out_5;
-            elsif read_reg1 = "110" then
-                read_data1 <= data_out_6;
-            elsif read_reg1 = "111" then
-                read_data1 <= data_out_7;   
-            end if;
+    wr_en_1 <= '1' when wr_en='1' and wr_reg="001" else '0';
+    wr_en_2 <= '1' when wr_en='1' and wr_reg="010" else '0';
+    wr_en_3 <= '1' when wr_en='1' and wr_reg="011" else '0';
+    wr_en_4 <= '1' when wr_en='1' and wr_reg="100" else '0';
+    wr_en_5 <= '1' when wr_en='1' and wr_reg="101" else '0';
+    wr_en_6 <= '1' when wr_en='1' and wr_reg="110" else '0';
+    wr_en_7 <= '1' when wr_en='1' and wr_reg="111" else '0';
 
-            if read_reg1 = "000" then
-                read_data2 <= data_out_0;
-            elsif read_reg2 = "001" then
-                read_data2 <= data_out_1;
-            elsif read_reg2 = "010" then
-                read_data2 <= data_out_2;
-            elsif read_reg2 = "011" then
-                read_data2 <= data_out_3;
-            elsif read_reg2 = "100" then
-                read_data2 <= data_out_4;
-            elsif read_reg2 = "101" then
-                read_data2 <= data_out_5;
-            elsif read_reg2 = "110" then
-                read_data2 <= data_out_6;
-            elsif read_reg2 = "111" then
-                read_data2 <= data_out_7;   
-            end if;    
-        end if;
-    end process;
+    read_data1 <=   data_out_0 when read_reg1 = "000" else
+                    data_out_1 when read_reg1 = "001" else
+                    data_out_2 when read_reg1 = "010" else
+                    data_out_3 when read_reg1 = "011" else
+                    data_out_4 when read_reg1 = "100" else
+                    data_out_5 when read_reg1 = "101" else
+                    data_out_6 when read_reg1 = "110" else
+                    data_out_7 when read_reg1 = "111" else 
+                    "0000000000000000";
+
+    read_data2 <=   data_out_0 when read_reg2 = "000" else
+                    data_out_1 when read_reg2 = "001" else
+                    data_out_2 when read_reg2 = "010" else
+                    data_out_3 when read_reg2 = "011" else
+                    data_out_4 when read_reg2 = "100" else
+                    data_out_5 when read_reg2 = "101" else
+                    data_out_6 when read_reg2 = "110" else
+                    data_out_7 when read_reg2 = "111" else 
+                    "0000000000000000";
+
 end architecture;
 
 

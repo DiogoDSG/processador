@@ -1,0 +1,9 @@
+opcode      fn 
+0000        nop
+0001        sum
+0010        sub
+0011        equal
+0100        greater
+0101        mov
+0110        movi
+1111        jump
