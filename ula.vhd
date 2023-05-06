@@ -6,7 +6,6 @@ entity ula is
     port (
         a,b:    in unsigned(15 downto 0);
         sel_op: in unsigned(3 downto 0);
-        state: in unsigned(2 downto 0);
         result: out unsigned(15 downto 0);
         exceed: out std_logic
     );

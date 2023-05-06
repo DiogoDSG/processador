@@ -6,7 +6,6 @@ entity program_counter is
     port(
         clk: in std_logic;
         rst: in std_logic;
-        wr_en: in std_logic;
         address_in: in unsigned(6 downto 0);
         address_out: out unsigned(6 downto 0)
     );
@@ -15,14 +14,12 @@ end entity;
 architecture a_program_counter of program_counter is
     signal data: unsigned(6 downto 0);
 begin 
-    process (clk, wr_en)
+    process (clk)
     begin 
         if (rst = '1') then
             data <= "0000000";
-        elsif (wr_en='1') then
-            if (rising_edge(clk)) then
-                data <= address_in;
-            end if;
+        elsif (rising_edge(clk)) then
+            data <= address_in;
         end if;
     end process;
     address_out <= data;

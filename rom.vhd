@@ -3,7 +3,7 @@ library ieee;
 use ieee.std_logic_1164.all; 
 use ieee.numeric_std.all; 
 entity rom is   
-    port( clk: in std_logic;         
+    port(         
     address: in unsigned(6 downto 0);         
     data: out unsigned(13 downto 0)); 
 end entity; 
@@ -24,13 +24,8 @@ constant rom_content : mem := (
     -- 9  => "00000000000000",      
     -- 10 => "00000000000000",
     -- abaixo: casos omissos => (zero em todos os bits)      
-    others => (others=>'0')); 
-    
+    others => (others=>'0'));    
     begin
-        process(clk)   
-        begin      
-            if(rising_edge(clk)) then         
-                data <= rom_content(to_integer(address));      
-            end if;   
-        end process; 
+    data <= rom_content(to_integer(address));      
+ 
 end architecture;

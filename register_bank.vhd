@@ -9,7 +9,6 @@ entity register_bank is
         read_reg1: in unsigned(2 downto 0);
         read_reg2: in unsigned(2 downto 0);
         wr_en: in std_logic;
-        state: in unsigned(2 downto 0);
         wr_data: in unsigned(15 downto 0);
         wr_reg: in unsigned(2 downto 0);
         read_data1: out unsigned(15 downto 0);

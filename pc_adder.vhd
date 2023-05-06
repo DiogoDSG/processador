@@ -4,7 +4,6 @@ use ieee.numeric_std.all;
 
 entity pc_adder is 
     port(
-        state: unsigned (2 downto 0);
         current_address: in unsigned(6 downto 0);
         next_address: out unsigned(6 downto 0)
     );

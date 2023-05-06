@@ -7,8 +7,7 @@ end entity;
 
 architecture a_rom_tb of rom_tb is
     component rom
-        port(
-            clk: in std_logic;         
+        port(  
             address: in unsigned(6 downto 0);         
             data: out unsigned(13 downto 0)
         ); 
@@ -16,23 +15,11 @@ architecture a_rom_tb of rom_tb is
 
     constant period_time: time := 100 ns;
     signal finished: std_logic := '0';
-    signal clk, read_en: std_logic;
     signal address: unsigned(6 downto 0);
     begin
         uut: rom port map(
-            clk => clk,
             address => address
         );
-    clk_global: process
-    begin
-        while finished /= '1' loop
-            clk <= '1';
-            wait for period_time / 2;
-            clk <= '0';
-            wait for period_time / 2;
-        end loop;
-        wait;
-    end process;
 
     sim_time_proc: process
     begin
@@ -43,13 +30,9 @@ architecture a_rom_tb of rom_tb is
 
     process
     begin
-        wait for period_time;
         address <= "0000000";
-        wait for period_time;
         address <= "0000001";
-        wait for period_time;
         address <= "1111111";
-        wait for period_time / 2;
         address <= "0000000";
         wait;
     end process;

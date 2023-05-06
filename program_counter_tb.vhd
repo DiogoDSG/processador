@@ -9,7 +9,6 @@ architecture a_program_counter_tb of program_counter_tb is
     component program_counter
         port(
             clk: in std_logic;
-            wr_en: in std_logic;
             rst: in std_logic;
             address_in: in unsigned(6 downto 0);
             address_out: out unsigned(6 downto 0)
@@ -22,14 +21,12 @@ architecture a_program_counter_tb of program_counter_tb is
     signal finished: std_logic := '0';
     signal clk: std_logic;
     signal rst: std_logic;
-    signal wr_en: std_logic;
     signal address_in: unsigned(6 downto 0);
     signal address_out: unsigned(6 downto 0);
 
     begin
         uut: program_counter port map(
             clk => clk,
-            wr_en => wr_en,
             rst => rst,
             address_in => address_in,
             address_out => address_out
@@ -57,13 +54,10 @@ architecture a_program_counter_tb of program_counter_tb is
         rst <= '1';
         wait for period_time;
         rst <= '0';
-        wr_en <= '1';
         address_in <= "0000010";
         wait for period_time*2;
         address_in <= "1111111";
-        wait for period_time;
-        wr_en <= '0';
-        wait for period_time;
+        wait for period_time*2;
         address_in <= "1000000";
         wait;
     end process;
