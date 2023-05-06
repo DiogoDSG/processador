@@ -1,0 +1,2 @@
+rm *.ghw
+rm *.cf

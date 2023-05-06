@@ -16,7 +16,7 @@ architecture a_rom_tb of rom_tb is
 
     constant period_time: time := 100 ns;
     signal finished: std_logic := '0';
-    signal clk: std_logic;
+    signal clk, read_en: std_logic;
     signal address: unsigned(6 downto 0);
     begin
         uut: rom port map(
