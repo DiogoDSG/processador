@@ -14,6 +14,8 @@ ghdl -a ula.vhd && ghdl -e ula && ghdl -a ula_tb.vhd && ghdl -e ula_tb && ghdl -
 
 ghdl -a register_bank.vhd && ghdl -e register_bank && ghdl -a register_bank_tb.vhd && ghdl -e register_bank_tb && ghdl -r register_bank_tb --wave=register_bank_tb.ghw
 
-ghdl -a if_id.vhd && ghdl -e if_id  && ghdl -a if_id_tb.vhd && ghdl -e if_id_tb && ghdl -r if_id_tb --wave=if_id_tb.ghw
+ghdl -a if_id.vhd && ghdl -e if_id  && ghdl -a if_id_tb.vhd && ghdl -e if_id_tb && ghdl -r if_id_tb --wave=if_id_tb.
+
+ghdl -a id_ex.vhd && ghdl -e id_ex  && ghdl -a id_ex_tb.vhd && ghdl -e id_ex_tb && ghdl -r id_ex_tb --wave=id_ex_tb.ghw
 
 ghdl -a processor.vhd && ghdl -e processor  && ghdl -a processor_tb.vhd && ghdl -e processor_tb && ghdl -r processor_tb --wave=processor_tb.ghw
