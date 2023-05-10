@@ -41,7 +41,7 @@ begin
     reg4: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en_4, data_in=>data_in, data_out=>data_out_4);
     reg5: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en_5, data_in=>data_in, data_out=>data_out_5);
     reg6: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en_6, data_in=>data_in, data_out=>data_out_6);
-    reg7: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en_7, data_in=>data_in, data_out=>data_out_7);
+    acc: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en_7, data_in=>data_in, data_out=>data_out_7);
 
     data_in <= wr_data;
 

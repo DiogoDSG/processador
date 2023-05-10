@@ -96,7 +96,7 @@ architecture a_processor of processor is
 
     signal reg_write, jump_en, alu_src, alu_src_id_ex_in, alu_src_id_ex_out, reg_write_id_ex_out: std_logic;
     signal alu_exceed: std_logic;
-    signal mux_alu_src_b: unsigned(15 downto 0);
+    signal mux_alu_src_a, mux_alu_src_b: unsigned(15 downto 0);
     signal wr_data_signal: unsigned(15 downto 0);
     signal pc_address_in : unsigned(6 downto 0) := "0000000";
     signal pc_address_out, pc_adder_next_address: unsigned(6 downto 0);
@@ -177,11 +177,11 @@ begin
     );
 
     -- LOGIC
-    reg1 <= instruction(9 downto 7);
-    reg2 <= instruction(6 downto 4);  
-    reg3 <= instruction(3 downto 1);
     opcode <= instruction(13 downto 10);
-    sel_op_in_ex_in <=instruction(13 downto 10);
+    reg1 <= instruction(9 downto 7) when opcode = "0101" or opcode= "0110" else "111";
+    reg2 <= instruction(6 downto 4) when opcode = "0101" or opcode= "0110" else "111";  
+    reg3 <= instruction(3 downto 1);
+    sel_op_in_ex_in <= instruction(13 downto 10);
     jump_address <= instruction(6 downto 0);
     alu_src_id_ex_in <= alu_src;
     sign_extend <= "000000000" when instruction(6) = '0' else "111111111";
