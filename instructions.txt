@@ -1,20 +1,21 @@
-movi $1,2
-movi $2,4
-mov $acc,$1
-movi $5,7
-add $acc,$acc,$2
+movi $3,5
+movi $4,8
+mov $acc,$3
 nop
-mov $3,$acc
+add $acc,$acc,$4
+nop
+mov $5,$acc
 nop
 movi $acc,0
 nop
 mov $acc,$5
+movi $6,1
 nop
-sub $acc,$acc,$1
+sub $acc,$acc,$6
 nop
-mov $4,$acc
+mov $5,$acc
 nop
 movi $acc,0
-nop
-jump 0
-nop
+jump 20
+mov $3,$5
+jump 2
