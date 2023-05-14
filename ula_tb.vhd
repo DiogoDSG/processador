@@ -11,13 +11,14 @@ architecture a_ula_tb of ula_tb is
             a,b:    in unsigned(15 downto 0);
             sel_op: in unsigned(3 downto 0);
             result: out unsigned(15 downto 0);
-            exceed: out std_logic
+            overflow: out std_logic;
+            negative: out std_logic
 
         ); 
     end component;
 
     signal a,b,result: unsigned(15 downto 0);
-    signal exceed: std_logic;
+    signal overflow, negative: std_logic;
     signal sel_op: unsigned(3 downto 0);
 
 
@@ -27,7 +28,8 @@ architecture a_ula_tb of ula_tb is
             b => b,
             sel_op => sel_op,
             result => result,
-            exceed => exceed
+            negative => negative,
+            overflow => overflow
         );
     process
     begin
@@ -138,9 +140,8 @@ architecture a_ula_tb of ula_tb is
         b <= "1000000000000001"; -- -32767
         sel_op <= "0011"; -- TRUE
         wait for 10 ns;
-        wait;
 
-        -- EXCEED   
+        -- overflow   
         a <= "0111111111111111";
         b <= "0000000000000001";
         sel_op <= "0000"; -- SUM = FF (-1)

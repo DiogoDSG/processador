@@ -30,8 +30,9 @@ architecture a_processor of processor is
             a,b:    in unsigned(15 downto 0);
             sel_op: in unsigned(3 downto 0);
             result: out unsigned(15 downto 0);
-            exceed: out std_logic
-        );
+            overflow: out std_logic;
+            negative: out std_logic        
+            );
     end component;
 
     component program_counter
@@ -87,6 +88,9 @@ architecture a_processor of processor is
 
     component control_unit
         port(
+            overflow: in std_logic;
+            immediate_id: in std_logic;
+            negative: in std_logic;
             opcode: in unsigned(3 downto 0);
             jump_en: out std_logic;
             reg_write: out std_logic;
@@ -94,8 +98,8 @@ architecture a_processor of processor is
         );
     end component;
 
-    signal reg_write, jump_en, alu_src, alu_src_id_ex_in, alu_src_id_ex_out, reg_write_id_ex_out: std_logic;
-    signal alu_exceed: std_logic;
+    signal reg_write, jump_en, alu_src, alu_src_id_ex_in, alu_src_id_ex_out, reg_write_id_ex_out, immediate_id: std_logic;
+    signal overflow, negative: std_logic;
     signal mux_alu_src_a, mux_alu_src_b: unsigned(15 downto 0);
     signal wr_data_signal: unsigned(15 downto 0);
     signal pc_address_in : unsigned(6 downto 0) := "0000000";
@@ -103,8 +107,8 @@ architecture a_processor of processor is
     signal jump_address: unsigned(6 downto 0) := "0000000";
     signal sel_op_in_ex_in, sel_op_id_ex_out, opcode: unsigned(3 downto 0) := "0000";
     signal rom_data, instruction: unsigned(13 downto 0);
-    signal sign_extend: unsigned(8 downto 0);
-    signal reg1, reg2, reg3, wr_reg_id_ex_out: unsigned(2 downto 0);
+    signal sign_extend: unsigned(9 downto 0);
+    signal reg_dst, reg_op1, reg_op2, wr_reg_id_ex_out: unsigned(2 downto 0);
     signal read_data_1_id_ex_in, read_data_2_id_ex_in, immediate_id_ex_in: unsigned(15 downto 0);
     signal read_data_1_id_ex_out, read_data_2_id_ex_out, immediate_id_ex_out: unsigned(15 downto 0);
 
@@ -140,6 +144,9 @@ begin
     );
 
     control_unit_instance: control_unit port map(
+        overflow => overflow,
+        negative => negative,
+        immediate_id => immediate_id,
         opcode => opcode, 
         reg_write => reg_write, 
         alu_src => alu_src, 
@@ -150,8 +157,8 @@ begin
         clk => clk, 
         rst => rst, 
         wr_en => reg_write_id_ex_out, 
-        read_reg1 => reg2, 
-        read_reg2 => reg3, 
+        read_reg1 => reg_op1, 
+        read_reg2 => reg_op2, 
         wr_data=> wr_data_signal, 
         wr_reg => wr_reg_id_ex_out, 
         read_data1 => read_data_1_id_ex_in, 
@@ -162,7 +169,7 @@ begin
         clk => clk, 
         read_data_1_in => read_data_1_id_ex_in, 
         read_data_2_in => read_data_2_id_ex_in, 
-        wr_reg_in => reg1, 
+        wr_reg_in => reg_dst, 
         immediate_in => immediate_id_ex_in,
         alu_src_in => alu_src_id_ex_in,
         opcode_in => sel_op_in_ex_in,
@@ -178,14 +185,16 @@ begin
 
     -- LOGIC
     opcode <= instruction(13 downto 10);
-    reg1 <= instruction(9 downto 7) when opcode = "0101" or opcode= "0110" else "111";
-    reg2 <= instruction(6 downto 4) when opcode = "0101" or opcode= "0110" else "111";  
-    reg3 <= instruction(3 downto 1);
+    reg_dst <= instruction(9 downto 7) when opcode = "0101" else "111";
+    reg_op2 <= instruction(9 downto 7) when opcode = "0001" or opcode= "0010" 
+    else instruction (6 downto 4);  
+    reg_op1 <= "000" when opcode="0101" else "111";
     sel_op_in_ex_in <= instruction(13 downto 10);
     jump_address <= instruction(6 downto 0);
     alu_src_id_ex_in <= alu_src;
-    sign_extend <= "000000000" when instruction(6) = '0' else "111111111";
-    immediate_id_ex_in <= sign_extend & instruction(6 downto 0);
+    sign_extend <= "0000000000" when instruction(6) = '0' else "1111111111";
+    immediate_id_ex_in <= sign_extend & instruction(6 downto 1);
+    immediate_id <= instruction(0);
 
     -- EX STAGE =====================================================================================
     -- COMPONENTS
@@ -194,7 +203,8 @@ begin
         b => mux_alu_src_b, 
         sel_op => sel_op_id_ex_out, 
         result => wr_data_signal, 
-        exceed =>alu_exceed
+        overflow => overflow,
+        negative => negative
     );
 
     -- LOGIC    

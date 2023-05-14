@@ -1,12 +1,12 @@
+import os
+
 instruction_map = {
     "nop": "00000000000000",
     "add": "0001",
     "sub": "0010",
-    "equal": "0011",
-    "greater": "0100",
     "mov": "0101",
-    "movi": "0110",
-    "jump": "1111000",
+    "jmp": "1111000",
+    "blt": "1110000",
 }
 
 register_map = {
@@ -24,37 +24,74 @@ register_map = {
 
 
 def parseInstruction(instruction):
+    if not instruction:
+        return
     inst = instruction.split(" ")[0]
     params = instruction.split(" ")[1].split(",") if inst != "nop" else []
+
     if inst == "nop":
         return instruction_map[inst]
     elif inst == "mov":
-        instruction = (
-            f"{instruction_map[inst]}{register_map[params[0]]}{register_map[params[1]]}"
-        )
-        return instruction + "0" * (14 - len(instruction))
-    elif inst == "movi":
-        const = str(bin(int(params[1]))).replace("b", "")
-        fullConst = "0" * (7 - len(const)) + const
-        instruction = f"{instruction_map[inst]}{register_map[params[0]]}{fullConst}"
+        if "$" not in params[1]:
+            const = str(bin(int(params[1]))).replace("b", "")
+            fullConst = "0" * (6 - len(const)) + const
+            instruction = (
+                f"{instruction_map[inst]}{register_map[params[0]]}{fullConst}1"
+            )
+        else:
+            instruction = f"{instruction_map[inst]}{register_map[params[0]]}{register_map[params[1]]}"
+            instruction += "0" * (14 - len(instruction))
+
         return instruction
-    elif inst == "jump":
+
+    elif inst == "jmp" or inst == "blt":
         const = str(bin(int(params[0]))).replace("b", "")
         fullConst = "0" * (7 - len(const)) + const
         return f"{instruction_map[inst]}{fullConst}"
     else:
-        instruction = f"{instruction_map[inst]}{register_map[params[0]]}{register_map[params[1]]}{register_map[params[2]]}"
-        return instruction + "0" * (14 - len(instruction))
+        if "$" not in params[0]:
+            const = str(bin(int(params[0]))).replace("b", "")
+            fullConst = "0" * (6 - len(const)) + const
+            instruction = f"{instruction_map[inst]}000{fullConst}1"
+        else:
+            instruction = f"{instruction_map[inst]}{register_map[params[0]]}"
+            instruction += "0" * (14 - len(instruction))
+
+        return instruction
 
 
 instruction_set = None
-with open("./instructions.txt", "r") as arquivo:
+with open("./instructions.asm", "r") as arquivo:
     instruction_set = arquivo.read()
 
 index = 0
-f = open("parsed_instructions.txt", "w")
+os.remove("rom.vhd")
+f = open("rom.vhd", "w")
+instructions = ""
 for instruction in instruction_set.split("\n"):
     # print(instruction)
-    f.write(f'{index} => "{parseInstruction(instruction)}",\n')
+
+    instructions += f'{index} => "{parseInstruction(instruction)}",\n\t'
     # print(parseInstruction(instruction))
     index += 1
+
+f.write(
+    f"""
+library ieee; 
+use ieee.std_logic_1164.all; 
+use ieee.numeric_std.all; 
+entity rom is   
+    port(         
+    address: in unsigned(6 downto 0);         
+    data: out unsigned(13 downto 0)); 
+end entity; 
+architecture a_rom of rom is type mem is array (0 to 127) of unsigned(13 downto 0);   
+constant rom_content : mem := (
+    {instructions}
+    others => (others=>'0'));    
+    begin
+    data <= rom_content(to_integer(address));      
+ 
+end architecture;
+"""
+)
