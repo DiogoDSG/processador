@@ -2,11 +2,11 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity ula_tb is
+entity alu_tb is
 end entity;
 
-architecture a_ula_tb of ula_tb is
-    component ula
+architecture a_alu_tb of alu_tb is
+    component alu
         port(
             a,b:    in unsigned(15 downto 0);
             sel_op: in unsigned(3 downto 0);
@@ -23,7 +23,7 @@ architecture a_ula_tb of ula_tb is
 
 
     begin
-        uut: ula port map(
+        uut: alu port map(
             a => a,
             b => b,
             sel_op => sel_op,

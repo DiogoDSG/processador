@@ -15,14 +15,20 @@ architecture a_id_ex_tb of id_ex_tb is
             immediate_in: in unsigned(15 downto 0);
             alu_src_in: in std_logic;
             reg_write_in: in std_logic;
+            ram_address_in: in unsigned(6 downto 0);
             opcode_in: in unsigned(3 downto 0);
+            mem_write_in: in std_logic;
+            mem_to_reg_in: in std_logic;
             read_data_1_out: out unsigned(15 downto 0);
             read_data_2_out: out unsigned(15 downto 0);
             wr_reg_out: out unsigned(2 downto 0);
             immediate_out: out unsigned(15 downto 0);
             alu_src_out: out std_logic;
             opcode_out: out unsigned(3 downto 0);
-            reg_write_out: out std_logic
+            reg_write_out: out std_logic;
+            mem_write_out: out std_logic;
+            mem_to_reg_out: out std_logic;
+            ram_address_out: out unsigned(6 downto 0)
         );
     end component;
 
@@ -30,11 +36,12 @@ architecture a_id_ex_tb of id_ex_tb is
 
     constant period_time: time := 100 ns;
     signal finished: std_logic := '0';
-    signal clk, alu_src_in, alu_src_out, reg_write_in, reg_write_out: std_logic;
+    signal clk, alu_src_in, alu_src_out, reg_write_in, reg_write_out, mem_write_in, mem_write_out, mem_to_reg_in, mem_to_reg_out: std_logic;
     signal read_data_1_in, read_data_2_in, immediate_in: unsigned(15 downto 0);
     signal read_data_1_out, read_data_2_out, immediate_out: unsigned(15 downto 0);
     signal wr_reg_in, wr_reg_out: unsigned(2 downto 0);
     signal opcode_in, opcode_out: unsigned(3 downto 0);
+    signal ram_address_in, ram_address_out: unsigned(6 downto 0);
 
 
     begin
@@ -47,13 +54,19 @@ architecture a_id_ex_tb of id_ex_tb is
             alu_src_in => alu_src_in,
             opcode_in => opcode_in,
             reg_write_in => reg_write_in,
+            mem_write_in => mem_write_in,
+            mem_to_reg_in => mem_to_reg_in,
+            ram_address_in => ram_address_in,
+            ram_address_out => ram_address_out,
+            mem_to_reg_out => mem_to_reg_out,
             read_data_1_out => read_data_1_out,
             read_data_2_out => read_data_2_out,
             wr_reg_out => wr_reg_out,
             immediate_out => immediate_out,
             alu_src_out => alu_src_out,
             opcode_out => opcode_out,
-            reg_write_out => reg_write_out
+            reg_write_out => reg_write_out,
+            mem_write_out => mem_write_out
         );
 
     clk_global: process
@@ -76,8 +89,11 @@ architecture a_id_ex_tb of id_ex_tb is
 
     process
     begin
+        mem_to_reg_in <= '1';
+        ram_address_in <= "0000001";
         read_data_1_in <= "0000010010100110";
         read_data_2_in <= "0000011110100110";
+        mem_write_in <= '1';
         immediate_in <= "0000011110100110";
         wr_reg_in <= "010";
         alu_src_in <= '1';

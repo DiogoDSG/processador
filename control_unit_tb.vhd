@@ -14,7 +14,9 @@ architecture a_control_unit_tb of control_unit_tb is
             jump_en: out std_logic;
             immediate_id: in std_logic;
             reg_write: out std_logic;
-            alu_src: out std_logic
+            alu_src: out std_logic;
+            mem_write: out std_logic;
+            mem_to_reg: out std_logic
         );
     end component;
 
@@ -22,7 +24,7 @@ architecture a_control_unit_tb of control_unit_tb is
 
     constant period_time: time := 100 ns;
     signal finished: std_logic := '0';
-    signal  jump_en, reg_write, alu_src, overflow, negative, immediate_id: std_logic;
+    signal  jump_en, reg_write, alu_src, overflow, negative, immediate_id,mem_to_reg: std_logic;
     signal opcode: unsigned(3 downto 0);
 
     begin
@@ -33,7 +35,8 @@ architecture a_control_unit_tb of control_unit_tb is
             immediate_id => immediate_id,
             jump_en => jump_en,
             alu_src => alu_src,
-            reg_write => reg_write
+            reg_write => reg_write,
+            mem_to_reg => mem_to_reg
         );
 
 
@@ -74,6 +77,20 @@ architecture a_control_unit_tb of control_unit_tb is
         overflow <= '1';
         opcode <= "1110";
         wait for period_time/2;
+
+        -- Testando Ram
+        opcode <= "0111";
+        wait for period_time;
+        opcode <= "0110";
+        wait for period_time;
+        
+        -- mem_to_reg
+        opcode <= "0111";
+        wait for period_time;
+        opcode <= "0110";
+        wait for period_time;
+        opcode <= "0001";
+        wait for period_time;
         wait;
     end process;
 end architecture;

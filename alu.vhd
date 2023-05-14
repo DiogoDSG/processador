@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity ula is
+entity alu is
     port (
         a,b:    in unsigned(15 downto 0);
         sel_op: in unsigned(3 downto 0);
@@ -12,7 +12,7 @@ entity ula is
     );
 end entity;
 
-architecture a_ula of ula is
+architecture a_alu of alu is
     signal sum,sub, result_signal: unsigned(15 downto 0);
 
 begin

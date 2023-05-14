@@ -11,14 +11,21 @@ entity id_ex is
         immediate_in: in unsigned(15 downto 0);
         alu_src_in: in std_logic;
         reg_write_in: in std_logic;
+        ram_address_in: in unsigned(6 downto 0);
         opcode_in: in unsigned(3 downto 0);
+        mem_write_in: in std_logic;
+        mem_to_reg_in: in std_logic;
         read_data_1_out: out unsigned(15 downto 0);
         read_data_2_out: out unsigned(15 downto 0);
         wr_reg_out: out unsigned(2 downto 0);
         immediate_out: out unsigned(15 downto 0);
         alu_src_out: out std_logic;
         opcode_out: out unsigned(3 downto 0);
-        reg_write_out: out std_logic
+        reg_write_out: out std_logic;
+        mem_write_out: out std_logic;
+        mem_to_reg_out: out std_logic;
+        ram_address_out: out unsigned(6 downto 0)
+
     );
 end entity;
 
@@ -34,6 +41,9 @@ begin
             alu_src_out <= alu_src_in;
             opcode_out <= opcode_in;
             reg_write_out <= reg_write_in;
+            mem_write_out <= mem_write_in;
+            mem_to_reg_out <= mem_to_reg_in;
+            ram_address_out <= ram_address_in;
         end if;
     end process;
 end architecture;
