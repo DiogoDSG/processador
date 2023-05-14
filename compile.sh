@@ -20,4 +20,7 @@ ghdl -a if_id.vhd && ghdl -e if_id  && ghdl -a if_id_tb.vhd && ghdl -e if_id_tb 
 
 ghdl -a id_ex.vhd && ghdl -e id_ex  && ghdl -a id_ex_tb.vhd && ghdl -e id_ex_tb && ghdl -r id_ex_tb --wave=id_ex_tb.ghw
 
+ghdl -a ram.vhd && ghdl -e ram && ghdl -a ram_tb.vhd && ghdl -e ram_tb && ghdl -r ram_tb --wave=ram_tb.ghw
+
+
 ghdl -a processor.vhd && ghdl -e processor  && ghdl -a processor_tb.vhd && ghdl -e processor_tb && ghdl -r processor_tb --wave=processor_tb.ghw
