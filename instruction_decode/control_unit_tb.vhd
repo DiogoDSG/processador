@@ -24,8 +24,8 @@ architecture a_control_unit_tb of control_unit_tb is
 
     constant period_time: time := 100 ns;
     signal finished: std_logic := '0';
-    signal  jump_en, reg_write, alu_src, overflow, negative, immediate_id,mem_to_reg: std_logic;
-    signal opcode: unsigned(3 downto 0);
+    signal  jump_en, reg_write, alu_src, overflow, negative, immediate_id,mem_to_reg: std_logic := '0';
+    signal opcode: unsigned(3 downto 0) := "0000";
 
     begin
         uut: control_unit port map(
