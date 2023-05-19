@@ -1,31 +1,12 @@
-mov $3,0
-mov $4,0
-mov $acc,$3
-nop
-nop
-nop
-add $4
-nop
-nop
-nop
-mov $4,$acc
-nop
-nop
-nop
-mov $acc,$3
-mov $1,1
-nop
-nop
-nop
+mov $acc,25
+sta 10
+mov $acc,12
+mov $1,15
 add $1
-nop
-nop
-nop
-mov $3,$acc
-mov $6,30
-mov $acc,$3
-nop
-nop
-nop
-sub $6
+mov $1,$acc
+lda 10
+add $1
+mov $2,$acc
+lda 10
+sub $1
 blt 2

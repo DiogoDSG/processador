@@ -15,6 +15,8 @@ entity id_ex is
         opcode_in: in unsigned(3 downto 0);
         mem_write_in: in std_logic;
         mem_to_reg_in: in std_logic;
+        reg_op1_in: in unsigned(2 downto 0);
+        reg_op2_in: in unsigned(2 downto 0);
         read_data_1_out: out unsigned(15 downto 0);
         read_data_2_out: out unsigned(15 downto 0);
         wr_reg_out: out unsigned(2 downto 0);
@@ -24,6 +26,8 @@ entity id_ex is
         reg_write_out: out std_logic;
         mem_write_out: out std_logic;
         mem_to_reg_out: out std_logic;
+        reg_op1_out: out unsigned(2 downto 0);
+        reg_op2_out: out unsigned(2 downto 0);
         ram_address_out: out unsigned(6 downto 0)
 
     );
@@ -44,6 +48,8 @@ begin
             mem_write_out <= mem_write_in;
             mem_to_reg_out <= mem_to_reg_in;
             ram_address_out <= ram_address_in;
+            reg_op1_out <= reg_op1_in;
+            reg_op2_out <= reg_op2_in;
         end if;
     end process;
 end architecture;

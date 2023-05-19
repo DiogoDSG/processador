@@ -19,6 +19,8 @@ architecture a_id_ex_tb of id_ex_tb is
             opcode_in: in unsigned(3 downto 0);
             mem_write_in: in std_logic;
             mem_to_reg_in: in std_logic;
+            reg_op1_in: in unsigned(2 downto 0);
+            reg_op2_in: in unsigned(2 downto 0);
             read_data_1_out: out unsigned(15 downto 0);
             read_data_2_out: out unsigned(15 downto 0);
             wr_reg_out: out unsigned(2 downto 0);
@@ -28,6 +30,8 @@ architecture a_id_ex_tb of id_ex_tb is
             reg_write_out: out std_logic;
             mem_write_out: out std_logic;
             mem_to_reg_out: out std_logic;
+            reg_op1_out: out unsigned(2 downto 0);
+            reg_op2_out: out unsigned(2 downto 0);
             ram_address_out: out unsigned(6 downto 0)
         );
     end component;
@@ -42,7 +46,7 @@ architecture a_id_ex_tb of id_ex_tb is
     signal wr_reg_in, wr_reg_out: unsigned(2 downto 0);
     signal opcode_in, opcode_out: unsigned(3 downto 0);
     signal ram_address_in, ram_address_out: unsigned(6 downto 0);
-
+    signal reg_op1_in, reg_op2_in, reg_op1_out, reg_op2_out: unsigned(2 downto 0);
 
     begin
         uut: id_ex port map(
@@ -66,7 +70,11 @@ architecture a_id_ex_tb of id_ex_tb is
             alu_src_out => alu_src_out,
             opcode_out => opcode_out,
             reg_write_out => reg_write_out,
-            mem_write_out => mem_write_out
+            mem_write_out => mem_write_out,
+            reg_op1_in => reg_op1_in,
+            reg_op2_in => reg_op2_in,
+            reg_op1_out => reg_op1_out,
+            reg_op2_out => reg_op2_out
         );
 
     clk_global: process
@@ -99,6 +107,8 @@ architecture a_id_ex_tb of id_ex_tb is
         alu_src_in <= '1';
         opcode_in <= "1111";
         reg_write_in <= '1';
+        reg_op1_in <= "001";
+        reg_op2_in <= "010";
         wait;
     end process;
 end architecture;

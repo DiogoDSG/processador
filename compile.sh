@@ -24,4 +24,6 @@ ghdl -a ram.vhd && ghdl -e ram && ghdl -a ram_tb.vhd && ghdl -e ram_tb && ghdl -
 
 ghdl -a ex_mem.vhd && ghdl -e ex_mem && ghdl -a ex_mem_tb.vhd && ghdl -e ex_mem_tb && ghdl -r ex_mem_tb --wave=ex_mem_tb.ghw
 
+ghdl -a forwarding_unit.vhd && ghdl -e forwarding_unit 
+
 ghdl -a processor.vhd && ghdl -e processor  && ghdl -a processor_tb.vhd && ghdl -e processor_tb && ghdl -r processor_tb --wave=processor_tb.ghw

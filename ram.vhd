@@ -18,7 +18,7 @@ architecture a_ram of ram is
 begin
     process(clk,wr_en)
     begin
-        if rising_edge(clk) then
+        if falling_edge(clk) then
             if wr_en='1' then
                 ram_data(to_integer(address)) <= data_in;
             end if;
