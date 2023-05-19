@@ -8,14 +8,14 @@ entity reg16bits is
         rst: in std_logic;
         wr_en: in std_logic;
         data_in: in unsigned(15 downto 0);
-        data_out: out unsigned(15 downto 0)
+        data_out: out unsigned(15 downto 0) := "0000000000000000"
     );
 end entity;
 
 architecture a_reg16bits of reg16bits is
     signal registro: unsigned(15 downto 0) := "0000000000000000";
 begin
-    process(clk, rst, wr_en)
+    process(clk, rst)
     begin   
         if rst = '1' then
             registro <= "0000000000000000";

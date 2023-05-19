@@ -23,8 +23,8 @@ architecture a_register_bank_tb of register_bank_tb is
     constant period_time: time := 100 ns;
     signal finished: std_logic := '0';
     signal clk, rst, wr_en: std_logic;
-    signal read_reg1, read_reg2, wr_reg: unsigned(2 downto 0);
-    signal read_data1, read_data2, wr_data: unsigned(15 downto 0);
+    signal read_reg1, read_reg2, wr_reg: unsigned(2 downto 0) := "000";
+    signal read_data1, read_data2, wr_data: unsigned(15 downto 0) := "0000000000000000";
 
     signal address: unsigned(6 downto 0);
     begin

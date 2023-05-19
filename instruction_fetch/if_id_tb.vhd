@@ -9,6 +9,7 @@ architecture a_if_id_tb of if_id_tb is
     component if_id
         port(
             clk: in std_logic;
+            rst: in std_logic;
             instruction_in: in unsigned(13 downto 0);
             instruction_out: out unsigned(13 downto 0)
         );
@@ -18,12 +19,13 @@ architecture a_if_id_tb of if_id_tb is
 
     constant period_time: time := 100 ns;
     signal finished: std_logic := '0';
-    signal clk: std_logic;
+    signal clk, rst: std_logic;
     signal instruction_in, instruction_out: unsigned(13 downto 0);
 
     begin
         uut: if_id port map(
             clk => clk,
+            rst => rst,
             instruction_in => instruction_in,
             instruction_out => instruction_out
         );
@@ -48,6 +50,9 @@ architecture a_if_id_tb of if_id_tb is
 
     process
     begin
+        rst <= '1';
+        wait for period_time;
+        rst <= '0';
         instruction_in <= "00010010100110";
         wait;
     end process;

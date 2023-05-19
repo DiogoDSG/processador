@@ -11,8 +11,8 @@ entity register_bank is
         wr_en: in std_logic;
         wr_data: in unsigned(15 downto 0);
         wr_reg: in unsigned(2 downto 0);
-        read_data1: out unsigned(15 downto 0);
-        read_data2: out unsigned(15 downto 0)
+        read_data1: out unsigned(15 downto 0) := "0000000000000000";
+        read_data2: out unsigned(15 downto 0) := "0000000000000000"
     );
 end entity;
 
@@ -28,13 +28,13 @@ architecture a_register_bank of register_bank is
         ); 
     end component;
 
-    signal data_in: unsigned(15 downto 0);
-    signal wr_en_0, wr_en_1, wr_en_2, wr_en_3, wr_en_4, wr_en_5, wr_en_6, wr_en_7: std_logic;
-    signal data_out_0, data_out_1, data_out_2, data_out_3, data_out_4, data_out_5, data_out_6, data_out_7: unsigned(15 downto 0);
+    signal data_in: unsigned(15 downto 0) := "0000000000000000";
+    signal wr_en_1, wr_en_2, wr_en_3, wr_en_4, wr_en_5, wr_en_6, wr_en_7: std_logic := '0';
+    signal data_out_0, data_out_1, data_out_2, data_out_3, data_out_4, data_out_5, data_out_6, data_out_7: unsigned(15 downto 0) := "0000000000000000";
 
 begin
     
-    zero: reg16bits port map(clk=>clk, rst=>'1', wr_en=>wr_en_0, data_in=>data_in, data_out=>data_out_0);
+    zero: reg16bits port map(clk=>clk, rst=>'1', wr_en=>'0', data_in=>data_in, data_out=>data_out_0);
     reg1: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en_1, data_in=>data_in, data_out=>data_out_1);
     reg2: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en_2, data_in=>data_in, data_out=>data_out_2);
     reg3: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en_3, data_in=>data_in, data_out=>data_out_3);

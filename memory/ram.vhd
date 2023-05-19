@@ -14,7 +14,7 @@ end entity;
 
 architecture a_ram of ram is
     type mem is array (0 to 127) of unsigned(15 downto 0);
-    signal ram_data : mem;
+    signal ram_data : mem := (others => "0000000000000000");
 begin
     process(clk,wr_en)
     begin

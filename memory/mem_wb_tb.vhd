@@ -9,6 +9,7 @@ architecture a_mem_wb_tb of mem_wb_tb is
     component mem_wb
         port(
             clk: in std_logic;
+            rst: in std_logic;
             mem_to_reg_in: in std_logic;
             reg_write_in: in std_logic;
             reg_dst_in: in unsigned(2 downto 0);
@@ -26,13 +27,14 @@ architecture a_mem_wb_tb of mem_wb_tb is
 
     constant period_time: time := 100 ns;
     signal finished: std_logic := '0';
-    signal clk, mem_to_reg_in, mem_to_reg_out, reg_write_in, reg_write_out: std_logic;
+    signal clk, rst, mem_to_reg_in, mem_to_reg_out, reg_write_in, reg_write_out: std_logic;
     signal ram_data_in, ram_data_out, alu_result_in, alu_result_out: unsigned(15 downto 0);
     signal reg_dst_in, reg_dst_out: unsigned(2 downto 0);
 
     begin
         uut: mem_wb port map(
             clk => clk,
+            rst => rst,
             ram_data_in => ram_data_in,
             alu_result_in => alu_result_in,
             reg_write_in => reg_write_in,
@@ -65,6 +67,9 @@ architecture a_mem_wb_tb of mem_wb_tb is
 
     process
     begin
+        rst <= '1';
+        wait for period_time;
+        rst <= '0';
         reg_dst_in <= "001";
         mem_to_reg_in <= '1';
         reg_write_in <= '1';

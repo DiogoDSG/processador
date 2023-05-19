@@ -47,6 +47,7 @@ architecture a_processor of processor is
     component if_id
         port(
             clk: in std_logic;
+            rst: in std_logic;
             instruction_in: in unsigned(13 downto 0);
             instruction_out: out unsigned(13 downto 0)
         ); 
@@ -55,6 +56,7 @@ architecture a_processor of processor is
     component id_ex
         port(
             clk: in std_logic;
+            rst: in std_logic;
             read_data_1_in: in unsigned(15 downto 0);
             read_data_2_in: in unsigned(15 downto 0);
             wr_reg_in: in unsigned(2 downto 0);
@@ -124,6 +126,7 @@ architecture a_processor of processor is
     component ex_mem
         port(
             clk: in std_logic;
+            rst: in std_logic;
             mem_write_in: in std_logic;
             alu_result_in: in unsigned(15 downto 0);
             address_in: in unsigned(6 downto 0);
@@ -154,6 +157,7 @@ architecture a_processor of processor is
     component mem_wb
         port(
             clk: in std_logic;
+            rst: in std_logic;
             mem_to_reg_in: in std_logic;
             reg_write_in: in std_logic;
             reg_dst_in: in unsigned(2 downto 0);
@@ -169,15 +173,15 @@ architecture a_processor of processor is
 
     signal reg_write, jump_en, alu_src, alu_src_id_ex_in, alu_src_id_ex_out, reg_write_id_ex_out, reg_write_ex_mem_out, immediate_id, mem_write, mem_write_id_ex_out, mem_write_ex_mem_out, mem_to_reg, mem_to_reg_id_ex_out, mem_to_reg_ex_mem_out: std_logic;
     signal overflow, negative, reg_write_mem_wb_out, mem_to_reg_mem_wb_out: std_logic;
-    signal mux_alu_src_a, mux_alu_src_b, write_data_ex_mem_out, ram_data_out, ram_data_mem_wb_out, alu_result_mem_wb_out, wr_data_mem_wb_out: unsigned(15 downto 0);
-    signal alu_result, alu_result_ex_mem_out,ex_mem_mux_reg_dst_value: unsigned(15 downto 0);
+    signal mux_alu_src_b, write_data_ex_mem_out, ram_data_out, ram_data_mem_wb_out, alu_result_mem_wb_out, wr_data_mem_wb_out: unsigned(15 downto 0);
+    signal alu_result, alu_result_ex_mem_out: unsigned(15 downto 0);
     signal pc_address_in, address_ex_mem_in, address_ex_mem_out: unsigned(6 downto 0) := "0000000";
     signal pc_address_out, pc_adder_next_address, ram_address: unsigned(6 downto 0);
     signal jump_address, ram_address_id_ex_out: unsigned(6 downto 0) := "0000000";
     signal sel_op_in_ex_in, sel_op_id_ex_out, opcode: unsigned(3 downto 0) := "0000";
     signal rom_data, instruction: unsigned(13 downto 0);
     signal sign_extend: unsigned(9 downto 0);
-    signal reg_dst, reg_op1, reg_op2, wr_reg_id_ex_out, reg_dst_ex_mem_out, reg_dst_mem_wb_out, reg_dst_id_ex_out, reg_op1_id_ex_out, reg_op2_id_ex_out: unsigned(2 downto 0);
+    signal reg_dst, reg_op1, reg_op2, reg_dst_ex_mem_out, reg_dst_mem_wb_out, reg_dst_id_ex_out, reg_op1_id_ex_out, reg_op2_id_ex_out: unsigned(2 downto 0);
     signal read_data_1_id_ex_in, read_data_2_id_ex_in, immediate_id_ex_in, mux_alu_ram: unsigned(15 downto 0);
     signal read_data_1_id_ex_out, read_data_2_id_ex_out, immediate_id_ex_out, mux_alu_a, mux_alu_b: unsigned(15 downto 0);
     signal reg_op1_fw_en, reg_op2_fw_en: unsigned(1 downto 0);
@@ -198,6 +202,7 @@ begin
     );
 
     if_id_instance: if_id port map(
+        rst => rst,
         clk => clk, 
         instruction_in => rom_data, 
         instruction_out => instruction
@@ -239,6 +244,7 @@ begin
 
     id_ex_instance: id_ex port map(
         clk => clk, 
+        rst => rst,
         read_data_1_in => read_data_1_id_ex_in, 
         read_data_2_in => read_data_2_id_ex_in, 
         wr_reg_in => reg_dst, 
@@ -301,6 +307,7 @@ begin
     
     ex_mem_instance: ex_mem port map(
         clk => clk,
+        rst => rst,
         alu_result_in => alu_result,
         alu_result_out => alu_result_ex_mem_out,
         write_data_in => alu_result,
@@ -336,6 +343,7 @@ begin
 
     mem_wb_instance: mem_wb port map(
         clk => clk,
+        rst => rst,
         ram_data_in => ram_data_out,
         alu_result_in => alu_result_ex_mem_out,
         reg_write_in => reg_write_ex_mem_out,

@@ -9,6 +9,7 @@ architecture a_ex_mem_tb of ex_mem_tb is
     component ex_mem
         port(
             clk: in std_logic;
+            rst: in std_logic;
             mem_write_in: in std_logic;
             alu_result_in: in unsigned(15 downto 0);
             address_in: in unsigned(6 downto 0);
@@ -30,7 +31,7 @@ architecture a_ex_mem_tb of ex_mem_tb is
 
     constant period_time: time := 100 ns;
     signal finished: std_logic := '0';
-    signal clk, mem_write_in, mem_write_out, reg_write_in, reg_write_out, mem_to_reg_in, mem_to_reg_out: std_logic;
+    signal clk, rst, mem_write_in, mem_write_out, reg_write_in, reg_write_out, mem_to_reg_in, mem_to_reg_out: std_logic;
     signal alu_result_in, alu_result_out: unsigned(15 downto 0);
     signal address_in, address_out: unsigned(6 downto 0);
     signal write_data_in, write_data_out: unsigned(15 downto 0);
@@ -39,6 +40,7 @@ architecture a_ex_mem_tb of ex_mem_tb is
     begin
         uut: ex_mem port map(
             clk => clk,
+            rst => rst,
             address_in => address_in,
             alu_result_in => alu_result_in,
             reg_write_in => reg_write_in,
@@ -75,6 +77,9 @@ architecture a_ex_mem_tb of ex_mem_tb is
 
     process
     begin
+        rst <= '1';
+        wait for period_time;
+        rst <= '0';
         reg_dst_in <= "001";
         mem_to_reg_in <= '1';
         reg_write_in <= '1';

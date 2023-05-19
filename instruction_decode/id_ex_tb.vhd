@@ -9,6 +9,7 @@ architecture a_id_ex_tb of id_ex_tb is
     component id_ex
         port(
             clk: in std_logic;
+            rst: in std_logic;
             read_data_1_in: in unsigned(15 downto 0);
             read_data_2_in: in unsigned(15 downto 0);
             wr_reg_in: in unsigned(2 downto 0);
@@ -39,7 +40,7 @@ architecture a_id_ex_tb of id_ex_tb is
     
 
     constant period_time: time := 100 ns;
-    signal finished: std_logic := '0';
+    signal finished, rst: std_logic := '0';
     signal clk, alu_src_in, alu_src_out, reg_write_in, reg_write_out, mem_write_in, mem_write_out, mem_to_reg_in, mem_to_reg_out: std_logic;
     signal read_data_1_in, read_data_2_in, immediate_in: unsigned(15 downto 0);
     signal read_data_1_out, read_data_2_out, immediate_out: unsigned(15 downto 0);
@@ -51,6 +52,7 @@ architecture a_id_ex_tb of id_ex_tb is
     begin
         uut: id_ex port map(
             clk => clk,
+            rst => rst,
             read_data_1_in => read_data_1_in,
             read_data_2_in => read_data_2_in,
             wr_reg_in => wr_reg_in,
@@ -97,6 +99,9 @@ architecture a_id_ex_tb of id_ex_tb is
 
     process
     begin
+        rst <= '1';
+        wait for period_time;
+        rst <= '0';
         mem_to_reg_in <= '1';
         ram_address_in <= "0000001";
         read_data_1_in <= "0000010010100110";

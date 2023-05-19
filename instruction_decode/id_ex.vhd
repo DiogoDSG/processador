@@ -5,6 +5,7 @@ use ieee.numeric_std.all;
 entity id_ex is
     port(
         clk: in std_logic;
+        rst: in std_logic;
         read_data_1_in: in unsigned(15 downto 0);
         read_data_2_in: in unsigned(15 downto 0);
         wr_reg_in: in unsigned(2 downto 0);
@@ -35,9 +36,22 @@ end entity;
 
 architecture a_id_ex of id_ex is
 begin
-    process(clk)
+    process(clk, rst)
     begin
-        if (rising_edge(clk)) then
+        if rst = '1' then
+            read_data_1_out <= "0000000000000000";
+            read_data_2_out <= "0000000000000000";
+            wr_reg_out <= "000";
+            immediate_out <= "0000000000000000";
+            alu_src_out <= '0';
+            opcode_out <= "0000";
+            reg_write_out <= '0';
+            mem_write_out <= '0';
+            mem_to_reg_out <= '0';
+            ram_address_out <= "0000000";
+            reg_op1_out <= "000";
+            reg_op2_out <= "000";
+        elsif (rising_edge(clk)) then
             read_data_1_out <= read_data_1_in;
             read_data_2_out <= read_data_2_in;
             wr_reg_out <= wr_reg_in;

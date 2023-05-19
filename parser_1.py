@@ -67,8 +67,8 @@ with open("./instructions.asm", "r") as arquivo:
     instruction_set = arquivo.read()
 
 index = 0
-os.remove("rom.vhd")
-f = open("rom.vhd", "w")
+os.remove("instruction_fetch/rom.vhd")
+f = open("instruction_fetch/rom.vhd", "w")
 instructions = ""
 for instruction in instruction_set.split("\n"):
     # print(instruction)
