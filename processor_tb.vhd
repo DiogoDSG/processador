@@ -9,20 +9,17 @@ architecture a_processor_tb of processor_tb is
     component processor
         port(
             clk: in std_logic;
-            rst: in std_logic;
-            alu_out: out unsigned(15 downto 0)
+            rst: in std_logic
         ); 
     end component;
 
     constant period_time: time := 100 ns;
     signal finished: std_logic := '0';
     signal clk, rst: std_logic;
-    signal alu_out: unsigned(15 downto 0);
     begin
         uut: processor port map(
             clk => clk,
-            rst => rst,
-            alu_out => alu_out
+            rst => rst
         );
     clk_global: process
     begin
