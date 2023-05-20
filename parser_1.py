@@ -4,11 +4,15 @@ instruction_map = {
     "nop": "00000000000000",
     "add": "0001",
     "sub": "0010",
+    "cmp": "0011",
     "mov": "0101",
-    "jmp": "1111000",
-    "blt": "1110000",
     "lda": "0110000",
     "sta": "0111000",
+    "bne": "1010000",
+    "beq": "1100000",
+    "bgt": "1101000",
+    "blt": "1110000",
+    "jmp": "1111000",
 }
 
 register_map = {
@@ -46,7 +50,7 @@ def parseInstruction(instruction):
 
         return instruction
 
-    elif inst == "jmp" or inst == "blt" or inst == "lda" or inst == "sta":
+    elif inst in ["jmp", "blt", "lda", "sta", "beq", "bne", "bgt"]:
         const = str(bin(int(params[0]))).replace("b", "")
         fullConst = "0" * (7 - len(const)) + const
         return f"{instruction_map[inst]}{fullConst}"

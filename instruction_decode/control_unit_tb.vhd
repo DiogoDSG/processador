@@ -10,6 +10,7 @@ architecture a_control_unit_tb of control_unit_tb is
         port(
             overflow: in std_logic;
             negative: in std_logic;
+            zero: in std_logic;
             opcode: in unsigned(3 downto 0);
             jump_en: out std_logic;
             immediate_id: in std_logic;
@@ -24,13 +25,14 @@ architecture a_control_unit_tb of control_unit_tb is
 
     constant period_time: time := 100 ns;
     signal finished: std_logic := '0';
-    signal  jump_en, reg_write, alu_src, overflow, negative, immediate_id,mem_to_reg: std_logic := '0';
+    signal  jump_en, reg_write, alu_src, overflow, negative, immediate_id,mem_to_reg, zero: std_logic := '0';
     signal opcode: unsigned(3 downto 0) := "0000";
 
     begin
         uut: control_unit port map(
             overflow => overflow,
             negative => negative,
+            zero => zero,
             opcode => opcode,
             immediate_id => immediate_id,
             jump_en => jump_en,

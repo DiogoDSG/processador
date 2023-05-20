@@ -8,7 +8,8 @@ entity alu is
         sel_op: in unsigned(3 downto 0);
         result: out unsigned(15 downto 0);
         overflow: out std_logic;
-        negative: out std_logic
+        negative: out std_logic;
+        zero: out std_logic
     );
 end entity;
 
@@ -42,7 +43,7 @@ begin
     result_signal <=   sum when sel_op="0000" else 
                 sum when sel_op="0001" else
                 sub when sel_op="0010" else
-                -- equal when sel_op="0011" else
+                sub when sel_op="0011" else
                 -- greater when sel_op="0100" else
                 sum when sel_op="0101" else
                 sum when sel_op="0110" else
@@ -52,5 +53,8 @@ begin
 
     -- NEGATIVE
     negative <= result_signal(15);
+
+    -- ZERO
+    zero <= '1' when result_signal = "0000000000000000" else '0';
 
 end architecture;
