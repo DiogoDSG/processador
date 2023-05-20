@@ -1,12 +1,11 @@
-mov $acc,25
-sta 10
-mov $acc,10
-mov $1,15
-add $1
-mov $1,$acc
-lda 10
-add $1
-mov $2,$acc
-lda 10
-cmp $1
-beq 2
+main:   
+    mov $1, -2
+    cmp $1
+    blt tag3
+label1:
+    cmp -1
+    bgt main
+tag3:
+    cmp 0
+    beq label1
+
