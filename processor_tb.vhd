@@ -47,7 +47,6 @@ architecture a_processor_tb of processor_tb is
         rst <= '1';
         wait for period_time;
         rst <= '0';
-        wait for period_time*20;
         wait;
     end process;
 end architecture;

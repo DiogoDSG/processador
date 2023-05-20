@@ -116,6 +116,9 @@ architecture a_processor of processor is
 
     component forwarding_unit
         port(
+            alu_src: in std_logic;
+            mem_wb_reg_write: in std_logic;
+            ex_mem_reg_write: in std_logic;
             reg_op1: in unsigned(2 downto 0);
             reg_op2: in unsigned(2 downto 0);
             ex_mem_reg_dst: in unsigned(2 downto 0);
@@ -177,7 +180,7 @@ architecture a_processor of processor is
     signal overflow, negative, zero, reg_write_mem_wb_out, mem_to_reg_mem_wb_out: std_logic;
     signal mux_alu_src_b, write_data_ex_mem_out, ram_data_out, ram_data_mem_wb_out, alu_result_mem_wb_out, wr_data_mem_wb_out: unsigned(15 downto 0);
     signal alu_result, alu_result_ex_mem_out: unsigned(15 downto 0);
-    signal pc_address_in, address_ex_mem_in, address_ex_mem_out: unsigned(6 downto 0) := "0000000";
+    signal current_address, address_ex_mem_in, address_ex_mem_out: unsigned(6 downto 0) := "0000000";
     signal pc_address_out, pc_adder_next_address, ram_address: unsigned(6 downto 0);
     signal jump_address, ram_address_id_ex_out: unsigned(6 downto 0) := "0000000";
     signal sel_op_in_ex_in, sel_op_id_ex_out, opcode: unsigned(3 downto 0) := "0000";
@@ -194,12 +197,12 @@ begin
     pc_instance: program_counter port map(
         clk => clk, 
         rst => rst, 
-        address_in => pc_address_in, 
+        address_in => pc_adder_next_address, 
         address_out => pc_address_out
     );
 
     pc_adder_instance: pc_adder port map(
-        current_address => pc_address_out, 
+        current_address => current_address, 
         next_address => pc_adder_next_address
     );
 
@@ -211,12 +214,12 @@ begin
     );
 
     -- LOGIC
-    pc_address_in <= jump_address when jump_en = '1' else pc_adder_next_address;
+    current_address <= jump_address when jump_en = '1' else pc_address_out;
 
     -- ID STAGE ======================================================================================
     -- COMPONENTS 
     rom_instance: rom port map(
-        address => pc_address_out, 
+        address => current_address, 
         data => rom_data
     );
 
@@ -303,6 +306,9 @@ begin
     forwarding_unit_instance: forwarding_unit port map(
         reg_op1 => reg_op1_id_ex_out,
         reg_op2 => reg_op2_id_ex_out,
+        alu_src => alu_src_id_ex_out,
+        mem_wb_reg_write => reg_write_mem_wb_out,
+        ex_mem_reg_write => reg_write_ex_mem_out,
         ex_mem_reg_dst => reg_dst_ex_mem_out,
         mem_wb_reg_dst => reg_dst_mem_wb_out,
         reg_op1_fw_en => reg_op1_fw_en,

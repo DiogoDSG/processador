@@ -1,5 +1,5 @@
 main:   
-    mov $1, -2
+    mov $1, 2
     cmp $1
     blt tag3
 label1:

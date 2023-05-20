@@ -114,6 +114,7 @@ for instruction in cleaned_instructions:
         continue
     for label in label_list:
         instruction = instruction.replace(label, str(labels[label]))
+    print(instruction)
     instructions += f'{index} => "{parseInstruction(instruction)}",\n\t'
     # print(parseInstruction(instruction))
     index += 1

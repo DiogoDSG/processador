@@ -1,3 +1,4 @@
+
 library ieee; 
 use ieee.std_logic_1164.all; 
 use ieee.numeric_std.all; 
@@ -8,7 +9,7 @@ entity rom is
 end entity; 
 architecture a_rom of rom is type mem is array (0 to 127) of unsigned(13 downto 0);   
 constant rom_content : mem := (
-    0 => "01010011111101",
+    0 => "01010010000101",
 	1 => "00110010000000",
 	2 => "11100000000101",
 	3 => "00110001111111",
@@ -21,4 +22,3 @@ constant rom_content : mem := (
     data <= rom_content(to_integer(address));      
  
 end architecture;
-
