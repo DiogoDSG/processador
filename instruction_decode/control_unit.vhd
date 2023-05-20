@@ -29,8 +29,8 @@ begin
     (opcode="1001" and negative='1')
     else '0';
 
-    alu_src <= '1' when (opcode = "0101" or opcode="0001" or opcode="0010" or opcode="0011") and immediate_id ='1' else '0';
-    reg_write <= '1' when opcode = "0001" or opcode = "0010" or opcode ="0101" or opcode ="0110" else '0';
+    alu_src <= '1' when (opcode = "0101" or opcode="0001" or opcode="0010" or opcode="0011" or opcode="0100") and immediate_id ='1' else '0';
+    reg_write <= '1' when opcode = "0001" or opcode = "0010" or opcode = "0100" or opcode ="0101" or opcode ="0110" else '0';
 
     mem_write <= '1' when opcode = "0111" else '0';
     mem_to_reg <= '1' when opcode = "0110" else '0';

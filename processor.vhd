@@ -295,8 +295,8 @@ begin
 
     opcode <= instruction(13 downto 10);
     reg_dst <= instruction(9 downto 7) when opcode = "0101" else "000" when opcode="0000" else "111";
-    reg_op2 <= instruction(9 downto 7) when opcode = "0001" or opcode= "0010"  or opcode = "0011"
-    else "000" when opcode="0000" else instruction (6 downto 4);  
+    reg_op2 <= instruction(9 downto 7) when opcode = "0001" or opcode= "0010" or opcode = "0011" or opcode = "0100" else "000" when opcode="0000" else instruction (6 downto 4);
+      
     reg_op1 <= "000" when opcode="0101" or opcode="0000" else "111";
     sel_op_in_ex_in <= instruction(13 downto 10);
     jump_address <= instruction(6 downto 0);

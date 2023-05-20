@@ -14,21 +14,13 @@ entity alu is
 end entity;
 
 architecture a_alu of alu is
-    signal sum,sub, result_signal: unsigned(15 downto 0);
-
+    signal sum,sub,result_signal: unsigned(15 downto 0);
+    signal mul: unsigned(31 downto 0);
 begin
     sum <= a+b;
     sub <= a-b;
-    -- equal <= "0000000000000001" when a = b else "0000000000000000";
-
-    -- -- GREATER
-    -- unsigned_part_greater <= '1' when a(6 downto 0) > b(6 downto 0) else '0';
-    -- greater <= "0000000000000001" when 
-    --             (b(15) = '1' and unsigned_part_greater = '1') or 
-    --             (a(15) = '0' and unsigned_part_greater = '1') or
-    --             (a(15) = '0' and b(15) = '1')
-    --             else "0000000000000000";
-
+    mul <= a * b;
+    
     -- OVERFLOW
     overflow <=  '1' when
                 (sel_op="0000" and (
@@ -44,7 +36,7 @@ begin
                 sum when sel_op="0001" else
                 sub when sel_op="0010" else
                 sub when sel_op="0011" else
-                -- greater when sel_op="0100" else
+                mul(15 downto 0) when sel_op="0100" else
                 sum when sel_op="0101" else
                 sum when sel_op="0110" else
                 sum when sel_op="0111" else
