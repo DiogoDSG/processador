@@ -1,7 +1,10 @@
-tag1:   blt tag2
-tag2:
-        jmp tag3
+main:   
+    mov $1, -2
+    cmp $1
+    blt tag3
+label1:
+    cmp -1
+    bgt main
 tag3:
-        blt tag1
-        add $4
-
+    cmp 0
+    beq label1

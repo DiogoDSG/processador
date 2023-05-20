@@ -31,7 +31,8 @@ architecture a_processor of processor is
             sel_op: in unsigned(3 downto 0);
             result: out unsigned(15 downto 0);
             overflow: out std_logic;
-            negative: out std_logic        
+            negative: out std_logic;
+            zero: out std_logic       
             );
     end component;
 
@@ -102,6 +103,7 @@ architecture a_processor of processor is
         port(
             overflow: in std_logic;
             negative: in std_logic;
+            zero: in std_logic;
             opcode: in unsigned(3 downto 0);
             immediate_id: in std_logic;
             jump_en: out std_logic;
@@ -172,7 +174,7 @@ architecture a_processor of processor is
     end component;
 
     signal reg_write, jump_en, alu_src, alu_src_id_ex_in, alu_src_id_ex_out, reg_write_id_ex_out, reg_write_ex_mem_out, immediate_id, mem_write, mem_write_id_ex_out, mem_write_ex_mem_out, mem_to_reg, mem_to_reg_id_ex_out, mem_to_reg_ex_mem_out: std_logic;
-    signal overflow, negative, reg_write_mem_wb_out, mem_to_reg_mem_wb_out: std_logic;
+    signal overflow, negative, zero, reg_write_mem_wb_out, mem_to_reg_mem_wb_out: std_logic;
     signal mux_alu_src_b, write_data_ex_mem_out, ram_data_out, ram_data_mem_wb_out, alu_result_mem_wb_out, wr_data_mem_wb_out: unsigned(15 downto 0);
     signal alu_result, alu_result_ex_mem_out: unsigned(15 downto 0);
     signal pc_address_in, address_ex_mem_in, address_ex_mem_out: unsigned(6 downto 0) := "0000000";
@@ -221,6 +223,7 @@ begin
     control_unit_instance: control_unit port map(
         overflow => overflow,
         negative => negative,
+        zero => zero,
         immediate_id => immediate_id,
         opcode => opcode, 
         reg_write => reg_write, 
@@ -274,7 +277,7 @@ begin
     -- LOGIC
     opcode <= instruction(13 downto 10);
     reg_dst <= instruction(9 downto 7) when opcode = "0101" else "000" when opcode="0000" else "111";
-    reg_op2 <= instruction(9 downto 7) when opcode = "0001" or opcode= "0010" 
+    reg_op2 <= instruction(9 downto 7) when opcode = "0001" or opcode= "0010"  or opcode = "0011"
     else "000" when opcode="0000" else instruction (6 downto 4);  
     reg_op1 <= "000" when opcode="0101" or opcode="0000" else "111";
     sel_op_in_ex_in <= instruction(13 downto 10);
@@ -293,7 +296,8 @@ begin
         sel_op => sel_op_id_ex_out, 
         result => alu_result, 
         overflow => overflow,
-        negative => negative
+        negative => negative,
+        zero => zero
     );
 
     forwarding_unit_instance: forwarding_unit port map(

@@ -12,13 +12,13 @@ architecture a_alu_tb of alu_tb is
             sel_op: in unsigned(3 downto 0);
             result: out unsigned(15 downto 0);
             overflow: out std_logic;
-            negative: out std_logic
-
+            negative: out std_logic;
+            zero: out std_logic
         ); 
     end component;
 
     signal a,b,result: unsigned(15 downto 0);
-    signal overflow, negative: std_logic;
+    signal overflow, negative, zero: std_logic;
     signal sel_op: unsigned(3 downto 0);
 
 
@@ -29,7 +29,8 @@ architecture a_alu_tb of alu_tb is
             sel_op => sel_op,
             result => result,
             negative => negative,
-            overflow => overflow
+            overflow => overflow,
+            zero => zero
         );
     process
     begin
