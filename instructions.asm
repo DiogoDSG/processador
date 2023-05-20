@@ -1,12 +1,7 @@
-mov $acc,25
-sta 10
-mov $acc,12
-mov $1,15
-add $1
-mov $1,$acc
-lda 10
-add $1
-mov $2,$acc
-lda 10
-sub $1
-blt 2
+tag1:   blt tag2
+tag2:
+        jmp tag3
+tag3:
+        blt tag1
+        add $4
+
