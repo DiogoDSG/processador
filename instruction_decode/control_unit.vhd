@@ -24,7 +24,9 @@ begin
     ((opcode="1110") and (negative='1' xor overflow='1')) or
     ((opcode="1101") and not (zero='1' or (negative='1' xor overflow='1'))) or
     (opcode="1100" and zero='1') or
-    (opcode="1010" and not zero='1')
+    (opcode="1011" and not zero='1') or
+    (opcode="1010" and negative='0') or
+    (opcode="1001" and negative='1')
     else '0';
 
     alu_src <= '1' when (opcode = "0101" or opcode="0001" or opcode="0010") and immediate_id ='1' else '0';

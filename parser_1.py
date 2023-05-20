@@ -8,7 +8,9 @@ instruction_map = {
     "mov": "0101",
     "lda": "0110000",
     "sta": "0111000",
-    "bne": "1010000",
+    "bmi": "1001000",
+    "bpl": "1010000",
+    "bne": "1011000",
     "beq": "1100000",
     "bgt": "1101000",
     "blt": "1110000",
@@ -50,7 +52,7 @@ def parseInstruction(instruction):
 
         return instruction
 
-    elif inst in ["jmp", "blt", "lda", "sta", "beq", "bne", "bgt"]:
+    elif inst in ["jmp", "blt", "lda", "sta", "beq", "bne", "bgt", "bpl", "bmi"]:
         const = str(bin(int(params[0]))).replace("b", "")
         fullConst = "0" * (7 - len(const)) + const
         return f"{instruction_map[inst]}{fullConst}"

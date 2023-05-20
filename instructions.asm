@@ -1,6 +1,6 @@
 mov $acc,25
 sta 10
-mov $acc,8
+mov $acc,10
 mov $1,15
 add $1
 mov $1,$acc
@@ -9,4 +9,4 @@ add $1
 mov $2,$acc
 lda 10
 cmp $1
-bgt 2
+beq 2
