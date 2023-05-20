@@ -1,4 +1,3 @@
-
 library ieee; 
 use ieee.std_logic_1164.all; 
 use ieee.numeric_std.all; 
@@ -22,3 +21,4 @@ constant rom_content : mem := (
     data <= rom_content(to_integer(address));      
  
 end architecture;
+

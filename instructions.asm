@@ -8,3 +8,4 @@ label1:
 tag3:
     cmp 0
     beq label1
+
