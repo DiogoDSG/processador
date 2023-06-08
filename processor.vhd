@@ -149,6 +149,7 @@ architecture a_processor of processor is
     component branch_control is
         port (
             clk: in std_logic;
+            wr_en: in std_logic;
             zero_in: in std_logic;
             overflow_in: in std_logic;
             negative_in: in std_logic;
@@ -351,7 +352,8 @@ begin
     );
 
     branch_control_instance: branch_control port map(
-        clk => alu_op_id_ex_out,
+        clk => clk,
+        wr_en => alu_op_id_ex_out,
         zero_in => zero,
         overflow_in => overflow,
         negative_in => negative,

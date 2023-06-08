@@ -66,6 +66,7 @@ def parseInstruction(instruction):
         return instruction
 
     elif inst in ["jmp", "blt", "lda", "sta", "beq", "bne", "bgt", "bpl", "bmi"]:
+        print(params)
         const = str(bin(int(params[0]))).replace("b", "")
         fullConst = "0" * (7 - len(const)) + const
         return f"{instruction_map[inst]}{fullConst}"
@@ -116,8 +117,8 @@ for instruction in cleaned_instructions:
     for label in label_list:
         instruction = instruction.replace(label, str(labels[label]))
     print(instruction)
+    print(f'{index} => "{parseInstruction(instruction)}",\n\t')
     instructions += f'{index} => "{parseInstruction(instruction)}",\n\t'
-    # print(parseInstruction(instruction))
     index += 1
 
 f.write(
