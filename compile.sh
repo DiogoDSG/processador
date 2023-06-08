@@ -14,6 +14,8 @@ ghdl -a memory/mem_wb.vhd && ghdl -e mem_wb && ghdl -a memory/mem_wb_tb.vhd && g
 
 ghdl -a execute/alu.vhd && ghdl -e alu && ghdl -a execute/alu_tb.vhd && ghdl -e alu_tb && ghdl -r alu_tb --wave=execute/alu_tb.ghw
 
+ghdl -a execute/branch_control.vhd && ghdl -e branch_control && ghdl -a execute/branch_control_tb.vhd && ghdl -e branch_control_tb && ghdl -r branch_control_tb --wave=execute/branch_control_tb.ghw
+
 ghdl -a write_back/register_bank.vhd && ghdl -e register_bank && ghdl -a write_back/register_bank_tb.vhd && ghdl -e register_bank_tb && ghdl -r register_bank_tb --wave=write_back/register_bank_tb.ghw
 
 ghdl -a instruction_fetch/if_id.vhd && ghdl -e if_id  && ghdl -a instruction_fetch/if_id_tb.vhd && ghdl -e if_id_tb && ghdl -r if_id_tb --wave=instruction_fetch/if_id_tb.

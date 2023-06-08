@@ -13,7 +13,8 @@ entity control_unit is
         reg_write: out std_logic;
         alu_src: out std_logic;
         mem_write: out std_logic;
-        mem_to_reg: out std_logic
+        mem_to_reg: out std_logic;
+        alu_op: out std_logic
     );
 end entity;
 
@@ -34,6 +35,8 @@ begin
 
     mem_write <= '1' when opcode = "0111" else '0';
     mem_to_reg <= '1' when opcode = "0110" else '0';
+
+    alu_op <= '1' when (opcode="0001" or opcode="0010" or opcode="0011") else '0';
 end architecture;
 
 

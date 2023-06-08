@@ -1,4 +1,5 @@
-mov $1, 2
-mov $acc, -10
-mul $1
-sta 0
+main:
+    mov $acc, 2
+    cmp 5
+    bgt main
+    blt main

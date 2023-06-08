@@ -80,6 +80,7 @@ architecture a_processor of processor is
             mem_to_reg_in: in std_logic;
             reg_op1_in: in unsigned(2 downto 0);
             reg_op2_in: in unsigned(2 downto 0);
+            alu_op_in: in std_logic;
             read_data_1_out: out unsigned(15 downto 0);
             read_data_2_out: out unsigned(15 downto 0);
             wr_reg_out: out unsigned(2 downto 0);
@@ -91,7 +92,8 @@ architecture a_processor of processor is
             mem_to_reg_out: out std_logic;
             reg_op1_out: out unsigned(2 downto 0);
             reg_op2_out: out unsigned(2 downto 0);
-            ram_address_out: out unsigned(6 downto 0)
+            ram_address_out: out unsigned(6 downto 0);
+            alu_op_out: out std_logic
         );
     end component;
 
@@ -106,11 +108,12 @@ architecture a_processor of processor is
             reg_write: out std_logic;
             alu_src: out std_logic;
             mem_write: out std_logic;
-            mem_to_reg: out std_logic
+            mem_to_reg: out std_logic;
+            alu_op: out std_logic
         );
     end component;
 
-    signal immediate_id, jump_en, alu_src, alu_src_id_ex_in,reg_write,mem_write,mem_to_reg: std_logic;
+    signal immediate_id, jump_en, alu_src, alu_src_id_ex_in,reg_write,mem_write,mem_to_reg,alu_op_id_ex_in: std_logic;
     signal sel_op_in_ex_in, opcode: unsigned(3 downto 0) := "0000";
     signal reg_dst, reg_op1, reg_op2: unsigned(2 downto 0);
     signal sign_extend: unsigned(9 downto 0);
@@ -143,6 +146,18 @@ architecture a_processor of processor is
         );
     end component;
 
+    component branch_control is
+        port (
+            clk: in std_logic;
+            zero_in: in std_logic;
+            overflow_in: in std_logic;
+            negative_in: in std_logic;
+            zero_out: out std_logic;
+            overflow_out: out std_logic;
+            negative_out: out std_logic
+        );
+    end component;
+
     component ex_mem
         port(
             clk: in std_logic;
@@ -164,7 +179,10 @@ architecture a_processor of processor is
         );
     end component;
 
-    signal overflow,negative,zero,alu_src_id_ex_out,mem_to_reg_id_ex_out,mem_write_id_ex_out, reg_write_id_ex_out: std_logic;
+    signal overflow,negative,zero,alu_src_id_ex_out,mem_to_reg_id_ex_out,mem_write_id_ex_out, reg_write_id_ex_out,alu_op_id_ex_out: std_logic;
+    signal zero_branch_control_out, negative_branch_control_out, overflow_branch_control_out: std_logic;
+    signal mux_overflow, mux_negative, mux_zero: std_logic;
+
     signal read_data_1_id_ex_out, read_data_2_id_ex_out, immediate_id_ex_out, mux_alu_a, mux_alu_b, alu_result, mux_alu_src_b, mux_alu_ram: unsigned(15 downto 0);
     signal sel_op_id_ex_out: unsigned(3 downto 0) := "0000";
     signal reg_op1_id_ex_out, reg_op2_id_ex_out,reg_dst_id_ex_out: unsigned(2 downto 0);
@@ -240,16 +258,17 @@ begin
 
     -- ID STAGE ======================================================================================
     control_unit_instance: control_unit port map(
-        overflow => overflow,
-        negative => negative,
-        zero => zero,
+        overflow => mux_overflow,
+        negative => mux_negative,
+        zero => mux_zero,
         immediate_id => immediate_id,
         opcode => opcode, 
         reg_write => reg_write, 
         alu_src => alu_src, 
         jump_en => jump_en,
         mem_write => mem_write,
-        mem_to_reg => mem_to_reg
+        mem_to_reg => mem_to_reg,
+        alu_op => alu_op_id_ex_in
     ); 
 
     regbank: register_bank port map(
@@ -271,6 +290,7 @@ begin
         read_data_2_in => read_data_2_id_ex_in, 
         wr_reg_in => reg_dst, 
         immediate_in => immediate_id_ex_in,
+        alu_op_in => alu_op_id_ex_in,
         alu_src_in => alu_src_id_ex_in,
         opcode_in => sel_op_in_ex_in,
         reg_write_in => reg_write,
@@ -290,7 +310,8 @@ begin
         reg_op1_in => reg_op1,
         reg_op2_in => reg_op2,
         reg_op1_out => reg_op1_id_ex_out,
-        reg_op2_out => reg_op2_id_ex_out
+        reg_op2_out => reg_op2_id_ex_out,
+        alu_op_out => alu_op_id_ex_out
     );
 
     opcode <= instruction(13 downto 10);
@@ -328,6 +349,16 @@ begin
         reg_op1_fw_en => reg_op1_fw_en,
         reg_op2_fw_en => reg_op2_fw_en
     );
+
+    branch_control_instance: branch_control port map(
+        clk => clk,
+        zero_in => zero,
+        overflow_in => overflow,
+        negative_in => negative,
+        zero_out => zero_branch_control_out,
+        overflow_out => overflow_branch_control_out,
+        negative_out => negative_branch_control_out
+    );
     
     ex_mem_instance: ex_mem port map(
         clk => clk,
@@ -347,6 +378,10 @@ begin
         mem_to_reg_out => mem_to_reg_ex_mem_out,
         reg_dst_out => reg_dst_ex_mem_out
     );
+
+    mux_negative <= negative when alu_op_id_ex_out = '1' else negative_branch_control_out;
+    mux_overflow <= overflow when alu_op_id_ex_out = '1' else overflow_branch_control_out;
+    mux_zero <= zero when alu_op_id_ex_out = '1' else zero_branch_control_out;
 
     mux_alu_src_b <= immediate_id_ex_out when alu_src_id_ex_out='1' else read_data_2_id_ex_out; 
     mux_alu_a <= read_data_1_id_ex_out when reg_op1_fw_en = "00" else mux_alu_ram when reg_op1_fw_en = "01" else wr_data_mem_wb_out;

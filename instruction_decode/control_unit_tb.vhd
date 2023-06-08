@@ -17,7 +17,8 @@ architecture a_control_unit_tb of control_unit_tb is
             reg_write: out std_logic;
             alu_src: out std_logic;
             mem_write: out std_logic;
-            mem_to_reg: out std_logic
+            mem_to_reg: out std_logic;
+            alu_op: out std_logic
         );
     end component;
 
@@ -25,7 +26,7 @@ architecture a_control_unit_tb of control_unit_tb is
 
     constant period_time: time := 100 ns;
     signal finished: std_logic := '0';
-    signal  jump_en, reg_write, alu_src, overflow, negative, immediate_id,mem_to_reg, zero: std_logic := '0';
+    signal  jump_en, reg_write, alu_src, overflow, negative, immediate_id,mem_to_reg, zero,alu_op: std_logic := '0';
     signal opcode: unsigned(3 downto 0) := "0000";
 
     begin
@@ -38,7 +39,8 @@ architecture a_control_unit_tb of control_unit_tb is
             jump_en => jump_en,
             alu_src => alu_src,
             reg_write => reg_write,
-            mem_to_reg => mem_to_reg
+            mem_to_reg => mem_to_reg,
+            alu_op => alu_op
         );
 
 
