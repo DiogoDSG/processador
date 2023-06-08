@@ -18,7 +18,7 @@ architecture a_branch_control of branch_control is
 begin
     process(clk)
     begin   
-        if rising_edge(clk) then
+        if falling_edge(clk) then
             zero_out <= zero_in;
             overflow_out <= overflow_in;
             negative_out <= negative_in;

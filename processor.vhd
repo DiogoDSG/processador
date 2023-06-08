@@ -351,7 +351,7 @@ begin
     );
 
     branch_control_instance: branch_control port map(
-        clk => clk,
+        clk => alu_op_id_ex_out,
         zero_in => zero,
         overflow_in => overflow,
         negative_in => negative,
