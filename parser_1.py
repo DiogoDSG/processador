@@ -66,13 +66,13 @@ def parseInstruction(instruction):
         return instruction
 
     elif inst in ["jmp", "blt", "beq", "bne", "bgt", "bpl", "bmi"]:
-        const = str(bin(int(params[0]))).replace("b", "")
+        const = str(bin(int(params[0]))).replace("0b", "")
         fullConst = "0" * (7 - len(const)) + const
         return f"{instruction_map[inst]}{fullConst}"
 
     elif inst in ["lda", "sta"]:
         if "$" not in params[0]:
-            const = str(bin(int(params[0]))).replace("b", "")
+            const = str(bin(int(params[0]))).replace("0b", "")
             fullConst = "0" * (7 - len(const)) + const
             instruction = f"{instruction_map[inst]}00{fullConst}1"
         else:
