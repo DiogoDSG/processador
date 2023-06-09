@@ -118,7 +118,8 @@ architecture a_processor of processor is
     signal immediate_id, jump_en, alu_src, alu_src_id_ex_in,reg_write,mem_write,mem_to_reg,alu_op_id_ex_in: std_logic;
     signal sel_op_in_ex_in, opcode: unsigned(3 downto 0) := "0000";
     signal reg_dst, reg_op1, reg_op2: unsigned(2 downto 0);
-    signal sign_extend: unsigned(9 downto 0);
+    signal sign_extend10bits: unsigned(9 downto 0);
+    signal sign_extend7bits: unsigned(6 downto 0);
     signal jump_address, ram_address_id_ex_in: unsigned(6 downto 0) := "0000000";
     signal read_data_1_id_ex_in, read_data_2_id_ex_in, immediate_id_ex_in: unsigned(15 downto 0);
     signal instruction_id_ex_out: unsigned(13 downto 0);
@@ -325,8 +326,9 @@ begin
     sel_op_in_ex_in <= instruction(13 downto 10);
     jump_address <= instruction(6 downto 0);
     alu_src_id_ex_in <= alu_src;
-    sign_extend <= "0000000000" when instruction(6) = '0' else "1111111111";
-    immediate_id_ex_in <= sign_extend & instruction(6 downto 1);
+    sign_extend10bits <= "0000000000" when instruction(6) = '0' else "1111111111";
+    sign_extend7bits <= "0000000" when instruction(9) = '0' else "1111111";
+    immediate_id_ex_in <= sign_extend10bits & instruction(6 downto 1) when opcode="0101" else sign_extend7bits & instruction(9 downto 1);
     immediate_id <= instruction(0);
     ram_address_id_ex_in <= instruction(7 downto 1) when instruction(0) = '1' else read_data_2_id_ex_in(6 downto 0);
 
@@ -385,7 +387,7 @@ begin
     mux_negative <= negative when alu_op_id_ex_out = '1' else negative_branch_control_out;
     mux_overflow <= overflow when alu_op_id_ex_out = '1' else overflow_branch_control_out;
     mux_zero <= zero when alu_op_id_ex_out = '1' else zero_branch_control_out;
-    mux_ram_addres <= ram_address_id_ex_out when instruction(0) = '1' or reg_op2_fw_en = "00" else mux_alu_ram(6 downto 0) when reg_op2_fw_en = "01" else wr_data_mem_wb_out(6 downto 0);
+    mux_ram_addres <= ram_address_id_ex_out when instruction_id_ex_out(0) = '1' or reg_op2_fw_en = "00" else mux_alu_ram(6 downto 0) when reg_op2_fw_en = "01" else wr_data_mem_wb_out(6 downto 0);
     mux_alu_src_b <= immediate_id_ex_out when alu_src_id_ex_out='1' else read_data_2_id_ex_out; 
     mux_alu_a <= read_data_1_id_ex_out when reg_op1_fw_en = "00" else mux_alu_ram when reg_op1_fw_en = "01" else wr_data_mem_wb_out;
     mux_alu_b <= mux_alu_src_b when reg_op2_fw_en = "00" else mux_alu_ram when reg_op2_fw_en = "01" else wr_data_mem_wb_out;

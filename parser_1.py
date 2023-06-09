@@ -82,8 +82,8 @@ def parseInstruction(instruction):
 
     else:
         if "$" not in params[0]:
-            fullConst = int_to_twos_complement_string(params[0], 6)
-            instruction = f"{instruction_map[inst]}000{fullConst}1"
+            fullConst = int_to_twos_complement_string(params[0], 9)
+            instruction = f"{instruction_map[inst]}{fullConst}1"
         else:
             instruction = f"{instruction_map[inst]}{register_map[params[0]]}"
             instruction += "0" * (14 - len(instruction))
