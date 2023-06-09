@@ -9,6 +9,7 @@ architecture a_branch_control_tb of branch_control_tb is
     component branch_control
         port(
             clk: in std_logic;
+            wr_en: in std_logic;
             zero_in: in std_logic;
             overflow_in: in std_logic;
             negative_in: in std_logic;
@@ -21,11 +22,12 @@ architecture a_branch_control_tb of branch_control_tb is
 
     constant period_time: time := 100 ns;
     signal finished: std_logic := '0';
-    signal zero_in,zero_out, negative_in, negative_out, overflow_in, overflow_out, clk: std_logic;
+    signal zero_in, wr_en, zero_out, negative_in, negative_out, overflow_in, overflow_out, clk: std_logic;
 
     begin
         uut: branch_control port map(
             clk => clk,
+            wr_en => wr_en,
             zero_in => zero_in,
             overflow_in => overflow_in,
             negative_in => negative_in,

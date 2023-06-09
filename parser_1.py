@@ -127,8 +127,8 @@ for instruction in cleaned_instructions:
     for label in label_list:
         instruction = instruction.replace(label, str(labels[label]))
     print(instruction)
+    print(f'{index} => "{parseInstruction(instruction)}",\n\t')
     instructions += f'{index} => "{parseInstruction(instruction)}",\n\t'
-    # print(parseInstruction(instruction))
     index += 1
 
 f.write(
