@@ -1,11 +1,11 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Fri Jun 09 21:57:46 2023
+[*] Fri Jun 09 21:57:59 2023
 [*]
 [dumpfile] "D:\repositories\processador\processor_tb.ghw"
 [dumpfile_mtime] "Fri Jun 09 21:54:52 2023"
 [dumpfile_size] 343579
-[savefile] "D:\repositories\processador\processor.gtkw"
+[savefile] "D:\repositories\processador\primos.gtkw"
 [timestart] 0
 [size] 1707 657
 [pos] -165 -50

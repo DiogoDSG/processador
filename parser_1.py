@@ -8,8 +8,8 @@ instruction_map = {
     "cmp": "0011",
     "mul": "0100",
     "mov": "0101",
-    "lda": "0110000",
-    "sta": "0111000",
+    "lda": "0110",
+    "sta": "0111",
     "bmi": "1001000",
     "bpl": "1010000",
     "bne": "1011000",
@@ -65,15 +65,25 @@ def parseInstruction(instruction):
 
         return instruction
 
-    elif inst in ["jmp", "blt", "lda", "sta", "beq", "bne", "bgt", "bpl", "bmi"]:
-        print(params)
+    elif inst in ["jmp", "blt", "beq", "bne", "bgt", "bpl", "bmi"]:
         const = str(bin(int(params[0]))).replace("b", "")
         fullConst = "0" * (7 - len(const)) + const
         return f"{instruction_map[inst]}{fullConst}"
+
+    elif inst in ["lda", "sta"]:
+        if "$" not in params[0]:
+            const = str(bin(int(params[0]))).replace("b", "")
+            fullConst = "0" * (7 - len(const)) + const
+            instruction = f"{instruction_map[inst]}00{fullConst}1"
+        else:
+            instruction = f"{instruction_map[inst]}000{register_map[params[0]]}"
+            instruction += "0" * (14 - len(instruction))
+        return instruction
+
     else:
         if "$" not in params[0]:
-            fullConst = int_to_twos_complement_string(params[0], 6)
-            instruction = f"{instruction_map[inst]}000{fullConst}1"
+            fullConst = int_to_twos_complement_string(params[0], 9)
+            instruction = f"{instruction_map[inst]}{fullConst}1"
         else:
             instruction = f"{instruction_map[inst]}{register_map[params[0]]}"
             instruction += "0" * (14 - len(instruction))

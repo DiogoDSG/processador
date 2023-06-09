@@ -12,6 +12,7 @@ architecture a_id_ex_tb of id_ex_tb is
             rst: in std_logic;
             read_data_1_in: in unsigned(15 downto 0);
             read_data_2_in: in unsigned(15 downto 0);
+            instruction_in: in unsigned(13 downto 0);
             wr_reg_in: in unsigned(2 downto 0);
             immediate_in: in unsigned(15 downto 0);
             alu_src_in: in std_logic;
@@ -25,6 +26,7 @@ architecture a_id_ex_tb of id_ex_tb is
             reg_op2_in: in unsigned(2 downto 0);
             read_data_1_out: out unsigned(15 downto 0);
             read_data_2_out: out unsigned(15 downto 0);
+            instruction_out: out unsigned(13 downto 0);
             wr_reg_out: out unsigned(2 downto 0);
             immediate_out: out unsigned(15 downto 0);
             alu_src_out: out std_logic;
@@ -46,6 +48,7 @@ architecture a_id_ex_tb of id_ex_tb is
     signal clk, alu_src_in, alu_src_out, reg_write_in, reg_write_out, mem_write_in, mem_write_out, mem_to_reg_in, mem_to_reg_out,alu_op_in, alu_op_out: std_logic;
     signal read_data_1_in, read_data_2_in, immediate_in: unsigned(15 downto 0);
     signal read_data_1_out, read_data_2_out, immediate_out: unsigned(15 downto 0);
+    signal instruction_in, instruction_out: unsigned(13 downto 0);
     signal wr_reg_in, wr_reg_out: unsigned(2 downto 0);
     signal opcode_in, opcode_out: unsigned(3 downto 0);
     signal ram_address_in, ram_address_out: unsigned(6 downto 0);
@@ -57,6 +60,7 @@ architecture a_id_ex_tb of id_ex_tb is
             rst => rst,
             read_data_1_in => read_data_1_in,
             read_data_2_in => read_data_2_in,
+            instruction_in => instruction_in,
             wr_reg_in => wr_reg_in,
             immediate_in => immediate_in,
             alu_src_in => alu_src_in,
@@ -69,6 +73,7 @@ architecture a_id_ex_tb of id_ex_tb is
             mem_to_reg_out => mem_to_reg_out,
             read_data_1_out => read_data_1_out,
             read_data_2_out => read_data_2_out,
+            instruction_out => instruction_out,
             wr_reg_out => wr_reg_out,
             immediate_out => immediate_out,
             alu_src_out => alu_src_out,
@@ -110,6 +115,7 @@ architecture a_id_ex_tb of id_ex_tb is
         ram_address_in <= "0000001";
         read_data_1_in <= "0000010010100110";
         read_data_2_in <= "0000011110100110";
+        instruction_in <= "00000111101001";
         mem_write_in <= '1';
         immediate_in <= "0000011110100110";
         wr_reg_in <= "010";

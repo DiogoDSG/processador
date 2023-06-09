@@ -38,8 +38,8 @@ begin
                 sub when sel_op="0011" else
                 mul(15 downto 0) when sel_op="0100" else
                 sum when sel_op="0101" else
-                sum when sel_op="0110" else
-                sum when sel_op="0111" else
+                a when sel_op="0110" else
+                a when sel_op="0111" else
                 "0000000000000000";
     result <= result_signal;
 

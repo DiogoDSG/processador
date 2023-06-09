@@ -8,6 +8,7 @@ entity id_ex is
         rst: in std_logic;
         read_data_1_in: in unsigned(15 downto 0);
         read_data_2_in: in unsigned(15 downto 0);
+        instruction_in: in unsigned(13 downto 0);
         wr_reg_in: in unsigned(2 downto 0);
         immediate_in: in unsigned(15 downto 0);
         alu_src_in: in std_logic;
@@ -30,6 +31,7 @@ entity id_ex is
         mem_to_reg_out: out std_logic;
         reg_op1_out: out unsigned(2 downto 0);
         reg_op2_out: out unsigned(2 downto 0);
+        instruction_out: out unsigned(13 downto 0);
         ram_address_out: out unsigned(6 downto 0);
         alu_op_out: out std_logic
     );
@@ -42,6 +44,7 @@ begin
         if rst = '1' then
             read_data_1_out <= "0000000000000000";
             read_data_2_out <= "0000000000000000";
+            instruction_out <= "00000000000000";
             wr_reg_out <= "000";
             immediate_out <= "0000000000000000";
             alu_src_out <= '0';
@@ -56,6 +59,7 @@ begin
         elsif (rising_edge(clk)) then
             read_data_1_out <= read_data_1_in;
             read_data_2_out <= read_data_2_in;
+            instruction_out <= instruction_in;
             wr_reg_out <= wr_reg_in;
             immediate_out <= immediate_in;
             alu_src_out <= alu_src_in;
